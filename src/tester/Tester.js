@@ -5,7 +5,10 @@ export default class TestBox extends React.Component {
   static propTypes = {
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    timeRemaining: PropTypes.number.isRequired,
+    currentKey: PropTypes.string,
+    currentQuestionNotes: PropTypes.array.isRequired
   };
 
   //   static defaultProps = {
