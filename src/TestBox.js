@@ -33,10 +33,28 @@ export default class TestBox extends React.Component {
   //   }
 
   render() {
+    const play = this.props.onPlayNote;
     return (
       <React.Fragment>
         <h1>Phils TestBox</h1>
-        <button>Do a Barrel Roll!</button>
+        <button
+          onClick={() => {
+            play(60);
+            play(67);
+          }}
+        >
+          Play Interval/s
+        </button>
+        <button
+          onClick={() => {
+            play(60);
+            setTimeout(() => {
+              play(67);
+            }, 700);
+          }}
+        >
+          Tease Interval/s
+        </button>
       </React.Fragment>
     );
   }
