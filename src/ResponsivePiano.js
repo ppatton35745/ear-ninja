@@ -19,7 +19,7 @@ const noteRange = {
 const keyboardShortcuts = KeyboardShortcuts.create({
   firstNote: noteRange.first,
   lastNote: noteRange.last,
-  keyboardConfig: KeyboardShortcuts.HOME_ROW
+  keyboardConfig: KeyboardShortcuts.PHILS_ROW
 });
 
 export default function ResponsivePiano() {
@@ -44,6 +44,7 @@ export default function ResponsivePiano() {
                   onPlayNote={playNote}
                   onStopNote={stopNote}
                   disabled={isLoading}
+                  keyboardShortcuts={keyboardShortcuts}
                 />
               </React.Fragment>
             )}
