@@ -139,10 +139,18 @@ export default class Tester extends React.Component {
     if (prevProps.currentQuestionNumber !== this.props.currentQuestionNumber) {
       this.setCurrentKey();
     }
+    if (prevProps.currentQuestionNotes !== this.props.currentQuestionNotes) {
+      console.log("questionNotes set", this.props.currentQuestionNotes);
+    }
   }
 
   componentDidMount() {
     this.setCurrentKey();
+    setTimeout(() => {
+      console.log("tried to play interval");
+      console.log("current test question", this.props.currentQuestionNotes);
+      this.playInterval();
+    }, 1000);
   }
 
   render() {
