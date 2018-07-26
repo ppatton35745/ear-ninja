@@ -213,6 +213,8 @@ class Piano extends React.Component {
         renderNoteLabel={this.renderNoteLabel}
         onPlayNote={this.onPlayNote}
         onStopNote={this.onStopNote}
+        currentAnswerNotes={this.props.currentAnswerNotes}
+        setCurrentAnswerNotes={this.props.setCurrentAnswerNotes}
       />
     );
   }

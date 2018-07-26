@@ -35,9 +35,44 @@ export default class App extends React.Component {
     });
   };
 
-  startTimer() {}
+  clearCurrentQuestionNotes = () => {
+    this.setState({
+      currentQuestionNotes: []
+    });
+  };
 
-  componentDidMount() {}
+  setCurrentAnswerNotes = notes => {
+    this.setState({
+      currentAnswerNotes: notes
+    });
+  };
+
+  clearCurrentAnswerNotes = () => {
+    this.setState({
+      currentAnswerNotes: []
+    });
+  };
+
+  submitAnswer = () => {};
+
+  startTimer() {
+    const timerInterval = setInterval(() => {
+      const timeRemaining = this.state.timeRemaining;
+      if (timeRemaining === 0) {
+        clearImmediate(timerInterval);
+      } else {
+        this.setState({
+          timeRemaining: timeRemaining - 1
+        });
+      }
+    }, 1000);
+  }
+
+  componentDidMount() {
+    this.startTimer();
+  }
+
+  componentDidUpdate() {}
 
   render() {
     return (
@@ -66,6 +101,7 @@ export default class App extends React.Component {
                   onStopNote={stopNote}
                   disabled={isLoading}
                   currentAnswerNotes={this.state.currentAnswerNotes}
+                  setCurrentAnswerNotes={this.setCurrentAnswerNotes}
                 />
               )}
             </DimensionsProvider>
@@ -75,30 +111,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-/* <div>
-  <DimensionsProvider>
-    {({ containerWidth, containerHeight }) => (
-      <SoundfontProvider
-        instrumentName="acoustic_grand_piano"
-        audioContext={audioContext}
-        hostname={soundfontHostname}
-        render={({ isLoading, playNote, stopNote }) => (
-          <React.Fragment>
-            <TestBox
-              onPlayNote={playNote}
-              onStopNote={stopNote}
-              disabled={isLoading}
-            />
-            <ResponsivePiano
-              width={containerWidth}
-              onPlayNote={playNote}
-              onStopNote={stopNote}
-              disabled={isLoading}
-            />
-          </React.Fragment>
-        )}
-      />
-    )}
-  </DimensionsProvider>
-</div>; */

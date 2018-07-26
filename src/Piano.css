@@ -50,6 +50,26 @@
 }
 
 /*
+   * Styles of "answered" or selected keys
+   */
+.ReactPiano__Key--answer {
+  background: purple;
+}
+
+.ReactPiano__Key--answer.ReactPiano__Key--accidental {
+  border: 1px solid #fff;
+  border-top: 1px solid purple;
+  /* Slight height reduction for "pushed-down" effect */
+  height: 65%;
+}
+
+.ReactPiano__Key--answer.ReactPiano__Key--natural {
+  border: 1px solid purple;
+  /* Slight height reduction for "pushed-down" effect */
+  height: 98%;
+}
+
+/*
    * Styles of "active" or pressed-down keys
    */
 .ReactPiano__Key--active {

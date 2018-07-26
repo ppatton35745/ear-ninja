@@ -178,6 +178,7 @@ export default class Tester extends React.Component {
         >
           Play Scale
         </button>
+        <button>{this.props.timeRemaining}</button>
       </React.Fragment>
     );
   }

@@ -62,6 +62,15 @@ class Key extends React.Component {
     );
   }
 
+  toggleCurrentAnswers() {
+    const answerIndex = this.props.currentAnswerNotes.indexOf(
+      this.props.midiNumber
+    );
+    if (answerIndex === -1) {
+      this.props.currentAnswerNotes.push(this.props.midiNumber);
+    }
+  }
+
   render() {
     const {
       naturalKeyWidth,
@@ -71,8 +80,10 @@ class Key extends React.Component {
       useTouchEvents,
       accidental,
       active,
+      isAnswer,
       disabled,
-      children
+      children,
+      currentAnswerNotes
     } = this.props;
 
     // Need to conditionally include/exclude handlers based on useTouchEvents,
@@ -83,7 +94,8 @@ class Key extends React.Component {
           "ReactPiano__Key--accidental": accidental,
           "ReactPiano__Key--natural": !accidental,
           "ReactPiano__Key--disabled": disabled,
-          "ReactPiano__Key--active": active
+          "ReactPiano__Key--active": active,
+          "ReactPiano__Key--answer": isAnswer
         })}
         style={{
           left: ratioToPercentage(
@@ -96,7 +108,10 @@ class Key extends React.Component {
           )
         }}
         onMouseDown={useTouchEvents ? null : this.playNote}
-        onMouseUp={useTouchEvents ? null : this.stopNote}
+        onMouseUp={() => {
+          useTouchEvents ? null : this.stopNote();
+          this.toggleCurrentAnswers();
+        }}
         onMouseEnter={gliss ? this.playNote : null}
         onMouseLeave={this.stopNote}
         onTouchStart={useTouchEvents ? this.playNote : null}

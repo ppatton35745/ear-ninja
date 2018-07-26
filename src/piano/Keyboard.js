@@ -67,12 +67,14 @@ class Keyboard extends React.Component {
         {this.getMidiNumbers().map(midiNumber => {
           const { note, isAccidental } = MidiNumbers.getAttributes(midiNumber);
           const isActive = this.props.activeNotes.includes(midiNumber);
+          const isAnswer = this.props.currentAnswerNotes.includes(midiNumber);
           return (
             <Key
               naturalKeyWidth={naturalKeyWidth}
               midiNumber={midiNumber}
               noteRange={this.props.noteRange}
               active={isActive}
+              isAnswer={isAnswer}
               accidental={isAccidental}
               disabled={this.props.disabled}
               onPlayNote={this.props.onPlayNote}
@@ -80,6 +82,8 @@ class Keyboard extends React.Component {
               gliss={this.props.gliss}
               useTouchEvents={this.props.useTouchEvents}
               key={midiNumber}
+              currentAnswerNotes={this.props.currentAnswerNotes}
+              setCurrentAnswerNotes={this.props.setCurrentAnswerNotes}
             >
               {this.props.disabled
                 ? null
