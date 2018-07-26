@@ -16,13 +16,24 @@ export default class App extends React.Component {
     this.state = {
       timeRemaining: 60,
       currentKey: "",
+      currentQuestionNumber: 1,
       currentQuestionNotes: [],
       currentAnswerNotes: [],
       completedQuestions: []
     };
   }
 
-  generateCurrentKey() {}
+  setCurrentKey = key => {
+    this.setState({
+      currentKey: key
+    });
+  };
+
+  setCurrentQuestionNotes = notes => {
+    this.setState({
+      currentQuestionNotes: notes
+    });
+  };
 
   startTimer() {}
 
@@ -42,7 +53,10 @@ export default class App extends React.Component {
               disabled={isLoading}
               timeRemaining={this.state.timeRemaining}
               currentKey={this.state.currentKey}
+              setCurrentKey={this.setCurrentKey}
               currentQuestionNotes={this.state.currentQuestionNotes}
+              setCurrentQuestionNotes={this.setCurrentQuestionNotes}
+              currentQuestionNumber={this.state.currentQuestionNumber}
             />
             <DimensionsProvider>
               {({ containerWidth, containerHeight }) => (
