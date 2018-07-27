@@ -12,6 +12,8 @@ class Key extends React.Component {
     useTouchEvents: PropTypes.bool.isRequired,
     accidental: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
+    isAnswer: PropTypes.bool.isRequired,
+    isHint: PropTypes.bool.isRequired,
     disabled: PropTypes.bool.isRequired,
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
@@ -81,9 +83,9 @@ class Key extends React.Component {
       accidental,
       active,
       isAnswer,
+      isHint,
       disabled,
-      children,
-      currentAnswerNotes
+      children
     } = this.props;
 
     // Need to conditionally include/exclude handlers based on useTouchEvents,
@@ -95,7 +97,8 @@ class Key extends React.Component {
           "ReactPiano__Key--natural": !accidental,
           "ReactPiano__Key--disabled": disabled,
           "ReactPiano__Key--active": active,
-          "ReactPiano__Key--answer": isAnswer
+          "ReactPiano__Key--answer": isAnswer,
+          "ReactPiano__Key--hint": isHint
         })}
         style={{
           left: ratioToPercentage(

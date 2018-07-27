@@ -19,9 +19,17 @@ export default class App extends React.Component {
       currentQuestionNumber: 1,
       currentQuestionNotes: [],
       currentAnswerNotes: [],
-      completedQuestions: []
+      completedQuestions: [],
+      initialPlay: false,
+      hintNotes: []
     };
   }
+
+  setInitialPlay = () => {
+    this.setState({
+      initialPlay: true
+    });
+  };
 
   setCurrentKey = key => {
     this.setState({
@@ -63,9 +71,10 @@ export default class App extends React.Component {
 
     this.setState({
       currentKey: "",
-      currentQuestionNumber: this.state.currentQuestionNumber++,
+      currentQuestionNumber: this.state.currentQuestionNumber + 1,
       currentQuestionNotes: [],
-      currentAnswerNotes: []
+      currentAnswerNotes: [],
+      initialPlay: false
     });
   };
 
@@ -81,6 +90,28 @@ export default class App extends React.Component {
       }
     }, 1000);
   }
+
+  onHintNote = midiNumber => {
+    const isHint = this.state.hintNotes.includes(midiNumber);
+    if (isHint) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      hintNotes: prevState.hintNotes.concat(midiNumber).sort()
+    }));
+  };
+
+  offHintNote = midiNumber => {
+    const isNotHint = !this.state.hintNotes.includes(midiNumber);
+    if (isNotHint) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      hintNotes: prevState.hintNotes.filter(note => midiNumber !== note)
+    }));
+  };
 
   componentDidMount() {
     this.startTimer();
@@ -108,6 +139,11 @@ export default class App extends React.Component {
               currentQuestionNumber={this.state.currentQuestionNumber}
               clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
               submitAnswer={this.submitAnswer}
+              initialPlay={this.state.initialPlay}
+              setInitialPlay={this.setInitialPlay}
+              onHintNote={this.onHintNote}
+              offHintNote={this.offHintNote}
+              hintNotes={this.state.hintNotes}
             />
             <DimensionsProvider>
               {({ containerWidth, containerHeight }) => (
@@ -118,6 +154,7 @@ export default class App extends React.Component {
                   disabled={isLoading}
                   currentAnswerNotes={this.state.currentAnswerNotes}
                   setCurrentAnswerNotes={this.setCurrentAnswerNotes}
+                  hintNotes={this.state.hintNotes}
                 />
               )}
             </DimensionsProvider>

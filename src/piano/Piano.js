@@ -21,7 +21,8 @@ class Piano extends React.Component {
         midiNumber: PropTypes.number.isRequired
       })
     ),
-    playbackNotes: PropTypes.arrayOf(PropTypes.number.isRequired)
+    playbackNotes: PropTypes.arrayOf(PropTypes.number.isRequired),
+    hintNotes: PropTypes.arrayOf(PropTypes.number.isRequired)
   };
 
   static defaultProps = {
@@ -215,6 +216,7 @@ class Piano extends React.Component {
         onStopNote={this.onStopNote}
         currentAnswerNotes={this.props.currentAnswerNotes}
         setCurrentAnswerNotes={this.props.setCurrentAnswerNotes}
+        hintNotes={this.props.hintNotes}
       />
     );
   }

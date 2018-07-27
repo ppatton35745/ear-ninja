@@ -9,6 +9,7 @@ class Keyboard extends React.Component {
   static propTypes = {
     noteRange: noteRangePropType,
     activeNotes: PropTypes.arrayOf(PropTypes.number),
+    hintNotes: PropTypes.arrayOf(PropTypes.number),
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
     renderNoteLabel: PropTypes.func.isRequired,
@@ -68,6 +69,7 @@ class Keyboard extends React.Component {
           const { note, isAccidental } = MidiNumbers.getAttributes(midiNumber);
           const isActive = this.props.activeNotes.includes(midiNumber);
           const isAnswer = this.props.currentAnswerNotes.includes(midiNumber);
+          const isHint = this.props.hintNotes.includes(midiNumber);
           return (
             <Key
               naturalKeyWidth={naturalKeyWidth}
@@ -75,6 +77,7 @@ class Keyboard extends React.Component {
               noteRange={this.props.noteRange}
               active={isActive}
               isAnswer={isAnswer}
+              isHint={isHint}
               accidental={isAccidental}
               disabled={this.props.disabled}
               onPlayNote={this.props.onPlayNote}
