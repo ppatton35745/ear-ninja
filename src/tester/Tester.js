@@ -12,7 +12,8 @@ export default class Tester extends React.Component {
     currentQuestionNotes: PropTypes.array.isRequired,
     setCurrentQuestionNotes: PropTypes.func.isRequired,
     currentQuestionNumber: PropTypes.number.isRequired,
-    clearCurrentAnswerNotes: PropTypes.func.isRequired
+    clearCurrentAnswerNotes: PropTypes.func.isRequired,
+    submitAnswer: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -137,12 +138,15 @@ export default class Tester extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.currentQuestionNumber !== this.props.currentQuestionNumber) {
-      this.setCurrentKey();
-    }
-    if (prevProps.currentQuestionNotes !== this.props.currentQuestionNotes) {
-      console.log("questionNotes set", this.props.currentQuestionNotes);
-    }
+    if (this.props.currentKey === "") {
+
+    } else if (this.props.currentQuestionNotes.length === 0)
+    // if (prevProps.currentQuestionNumber !== this.props.currentQuestionNumber) {
+    //   this.setCurrentKey();
+    // }
+    // if (prevProps.currentQuestionNotes !== this.props.currentQuestionNotes) {
+    //   console.log("questionNotes set", this.props.currentQuestionNotes);
+    // }
   }
 
   componentDidMount() {
@@ -188,7 +192,7 @@ export default class Tester extends React.Component {
         </button>
         <button
           onClick={() => {
-            alert("answer submitted!");
+            this.props.submitAnswer();
           }}
         >
           Submit

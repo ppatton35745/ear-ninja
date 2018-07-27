@@ -53,7 +53,21 @@ export default class App extends React.Component {
     });
   };
 
-  submitAnswer = () => {};
+  submitAnswer = () => {
+    this.state.completedQuestions.push({
+      key: this.state.currentKey,
+      questionNumber: this.state.currentQuestionNumber,
+      questionNotes: this.state.currentQuestionNotes,
+      answerNotes: this.state.currentAnswerNotes
+    });
+
+    this.setState({
+      currentKey: "",
+      currentQuestionNumber: this.state.currentQuestionNumber++,
+      currentQuestionNotes: [],
+      currentAnswerNotes: []
+    });
+  };
 
   startTimer() {
     const timerInterval = setInterval(() => {
@@ -93,6 +107,7 @@ export default class App extends React.Component {
               setCurrentQuestionNotes={this.setCurrentQuestionNotes}
               currentQuestionNumber={this.state.currentQuestionNumber}
               clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+              submitAnswer={this.submitAnswer}
             />
             <DimensionsProvider>
               {({ containerWidth, containerHeight }) => (
