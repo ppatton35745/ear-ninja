@@ -70,6 +70,7 @@ class Key extends React.Component {
     );
     if (answerIndex === -1) {
       this.props.currentAnswerNotes.push(this.props.midiNumber);
+      this.props.currentAnswerNotes.sort();
     }
   }
 

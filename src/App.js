@@ -38,6 +38,7 @@ export default class App extends React.Component {
   };
 
   setCurrentQuestionNotes = notes => {
+    notes.sort();
     this.setState({
       currentQuestionNotes: notes
     });
@@ -50,6 +51,7 @@ export default class App extends React.Component {
   };
 
   setCurrentAnswerNotes = notes => {
+    notes.sort();
     this.setState({
       currentAnswerNotes: notes
     });
@@ -144,6 +146,7 @@ export default class App extends React.Component {
               onHintNote={this.onHintNote}
               offHintNote={this.offHintNote}
               hintNotes={this.state.hintNotes}
+              currentAnswerNotes={this.state.currentAnswerNotes}
             />
             <DimensionsProvider>
               {({ containerWidth, containerHeight }) => (

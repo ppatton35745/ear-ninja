@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import getInterval from "./getInterval";
+import hinter from "./hinter";
 
 export default class Tester extends React.Component {
   static propTypes = {
@@ -18,7 +20,8 @@ export default class Tester extends React.Component {
     setInitialPlay: PropTypes.func.isRequired,
     onHintNote: PropTypes.func.isRequired,
     offHintNote: PropTypes.func.isRequired,
-    hintNotes: PropTypes.arrayOf(PropTypes.number.isRequired)
+    hintNotes: PropTypes.arrayOf(PropTypes.number.isRequired),
+    currentAnswerNotes: PropTypes.array.isRequired
   };
 
   constructor(props) {
@@ -43,129 +46,50 @@ export default class Tester extends React.Component {
     this.noteRange = { min: 48, max: 72 };
   }
 
-  setInterval(seedNote) {
-    const scalarNotes = [];
-    let i = seedNote;
-    let j = 0;
-
-    scalarNotes.push(i);
-
-    while ((i -= this.downPattern[j % 7]) >= this.noteRange.min) {
-      scalarNotes.push(i);
-      j++;
-    }
-
-    i = seedNote;
-    j = 0;
-
-    while ((i += this.upPattern[j % 7]) <= this.noteRange.max) {
-      scalarNotes.push(i);
-      j++;
-    }
-
-    scalarNotes.sort();
-
-    const notes = [];
-
-    for (let i = 0; i < 2; i++) {
-      notes.push(scalarNotes[Math.floor(Math.random() * scalarNotes.length)]);
-    }
-    notes.sort();
-    this.props.setCurrentQuestionNotes(notes);
-  }
-
   setCurrentKey() {
     const randomKeyNum = Math.floor(Math.random() * 12);
     this.props.setCurrentKey(this.musicKeys[randomKeyNum]);
   }
 
+  setInterval(seedNote) {
+    this.props.setCurrentQuestionNotes(
+      getInterval(
+        seedNote,
+        this.downPattern,
+        this.upPattern,
+        this.noteRange.min,
+        this.noteRange.max
+      )
+    );
+  }
+
   playInterval() {
-    this.props.currentQuestionNotes.forEach(note => {
-      this.props.onPlayNote(note);
-    });
+    hinter.playInterval(this.props.currentQuestionNotes, this.props.onPlayNote);
   }
 
   playTeasedInterval() {
-    const notes = this.props.currentQuestionNotes;
-    const play = this.props.onPlayNote;
-    const playDelayed = note => {
-      setTimeout(() => play(note), 600);
-    };
-
-    play(notes[0]);
-    let i = 1;
-    while (i < notes.length) {
-      playDelayed(notes[i]);
-      i++;
-    }
+    hinter.playTeasedInterval(
+      this.props.currentQuestionNotes,
+      this.props.onPlayNote
+    );
   }
 
   playScale() {
-    const play = this.props.onPlayNote;
-    const stop = this.props.onStopNote;
-    let note = this.seedNotes[this.musicKeys.indexOf(this.props.currentKey)];
-    const playDelayed = (note, j, from) => {
-      setTimeout(() => {
-        play(note);
-      }, j * 200);
-      setTimeout(() => {
-        this.props.onHintNote(note);
-      }, j * 215);
-
-      setTimeout(() => {
-        stop(note);
-      }, j * 200 + 199);
-      setTimeout(() => {
-        this.props.offHintNote(note);
-      }, j * 215 + 199);
-    };
-
-    let j = 0;
-
-    while (j <= this.upPattern.length) {
-      playDelayed(note, j, "up");
-      if (j !== this.upPattern.length) {
-        note += this.upPattern[j];
-      }
-      j++;
-    }
-
-    let k = 0;
-
-    while (k <= this.downPattern.length) {
-      playDelayed(note, j, "down");
-
-      note -= this.downPattern[k];
-      j++;
-      k++;
-    }
+    const note = this.seedNotes[this.musicKeys.indexOf(this.props.currentKey)];
+    hinter.playScale(
+      note,
+      this.props.onPlayNote,
+      this.props.onStopNote,
+      this.upPattern,
+      this.downPattern,
+      this.props.onHintNote,
+      this.props.offHintNote
+    );
   }
 
-  onHintNote = midiNumber => {
-    if (this.props.disabled) {
-      return;
-    }
-    // Prevent duplicate note firings
-    const isHint = this.props.hintNotes.includes(midiNumber);
-    if (isHint) {
-      return;
-    }
-
-    this.props.hintNotes.push(midiNumber);
-  };
-
-  offHintNote = midiNumber => {
-    if (this.props.disabled) {
-      return;
-    }
-    // Prevent duplicate note firings
-    const isHint = this.props.hintNotes.includes(midiNumber);
-    if (!isHint) {
-      return;
-    }
-
-    this.props.hintNotes.push(midiNumber);
-  };
+  componentDidMount() {
+    this.setCurrentKey();
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.currentKey === "") {
@@ -179,10 +103,6 @@ export default class Tester extends React.Component {
       setTimeout(() => this.playInterval(), 4000);
       this.props.setInitialPlay();
     }
-  }
-
-  componentDidMount() {
-    this.setCurrentKey();
   }
 
   render() {
@@ -224,7 +144,21 @@ export default class Tester extends React.Component {
         >
           Submit
         </button>
-        <button>{this.props.timeRemaining}</button>
+        <button>Time Remaining: {this.props.timeRemaining}</button>
+        <button>Key: {this.props.currentKey}</button>
+        <button>Question #: {this.props.currentQuestionNumber}</button>
+        <button>
+          Current Question:{" "}
+          {this.props.currentQuestionNotes.map(note => (
+            <span key={note}>{note + " "}</span>
+          ))}
+        </button>
+        <button>
+          Current Answers:{" "}
+          {this.props.currentAnswerNotes.map(note => (
+            <span key={note}> {note + " "}</span>
+          ))}
+        </button>
       </React.Fragment>
     );
   }
