@@ -92,6 +92,7 @@ export default class App extends React.Component {
               currentQuestionNotes={this.state.currentQuestionNotes}
               setCurrentQuestionNotes={this.setCurrentQuestionNotes}
               currentQuestionNumber={this.state.currentQuestionNumber}
+              clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
             />
             <DimensionsProvider>
               {({ containerWidth, containerHeight }) => (

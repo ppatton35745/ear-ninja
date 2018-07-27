@@ -11,7 +11,8 @@ export default class Tester extends React.Component {
     setCurrentKey: PropTypes.func.isRequired,
     currentQuestionNotes: PropTypes.array.isRequired,
     setCurrentQuestionNotes: PropTypes.func.isRequired,
-    currentQuestionNumber: PropTypes.number.isRequired
+    currentQuestionNumber: PropTypes.number.isRequired,
+    clearCurrentAnswerNotes: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -177,6 +178,20 @@ export default class Tester extends React.Component {
           }}
         >
           Play Scale
+        </button>
+        <button
+          onClick={() => {
+            this.props.clearCurrentAnswerNotes();
+          }}
+        >
+          Clear
+        </button>
+        <button
+          onClick={() => {
+            alert("answer submitted!");
+          }}
+        >
+          Submit
         </button>
         <button>{this.props.timeRemaining}</button>
       </React.Fragment>
