@@ -16,32 +16,38 @@ export default class Header extends React.Component {
   }
 
   render() {
-    let headerContent = null;
-
-    if (!this.props.inRound && !this.props.viewingStats) {
-      if (this.props.roundResults.length === 0) {
-        headerContent = <span>Welcome to Ear-Ninja</span>;
-      } else {
-        headerContent = <span>Round Results: </span>;
-      }
-    } else if (this.props.inRound) {
-      headerContent = (
-        <React.Fragment>
-          <span>{`Time Remaining: ${this.props.timeRemaining}`}</span>
-          <span>{`Current Key: ${this.props.currentKey}`}</span>
-          <span>{`Current Score: ${this.props.currentScore.correct}/${
-            this.props.currentScore.possible
-          }`}</span>
-        </React.Fragment>
+    if (this.props.inRound) {
+      return (
+        <div>
+          <h2>
+            <span>{`Time Remaining: ${this.props.timeRemaining}`}</span>
+            <span>{`Current Key: ${this.props.currentKey}`}</span>
+            <span>{`Current Score: ${this.props.currentScore.correct}/${
+              this.props.currentScore.possible
+            }`}</span>
+          </h2>
+        </div>
       );
     } else if (this.props.viewingStats) {
-      headerContent = <span>Stats: </span>;
+      return (
+        <div>
+          <h2>Stats: </h2>
+        </div>
+      );
+    } else {
+      if (this.props.roundResults.length === 0) {
+        return (
+          <div>
+            <h2>Welcome to Ear-Ninja</h2>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <h2>Round Results: </h2>
+          </div>
+        );
+      }
     }
-
-    return (
-      <div>
-        <h2>{headerContent}</h2>
-      </div>
-    );
   }
 }

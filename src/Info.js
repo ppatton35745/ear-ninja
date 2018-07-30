@@ -14,24 +14,35 @@ export default class Into extends React.Component {
   }
 
   render() {
-    let infoParagraph = "";
-
     if (this.props.inRound) {
-      infoParagraph = "This is a placeholder for the current round score";
+      return (
+        <div>
+          <p>This is a placeholder for the current round score</p>
+        </div>
+      );
+    } else if (this.props.viewingStats) {
+      return (
+        <div>
+          <p>This is a placeholder for stats info</p>
+        </div>
+      );
     } else {
       if (this.props.roundResults.length === 0) {
-        infoParagraph =
-          "This is a placeholder giving instructions for the game";
+        return (
+          <div>
+            <p>This is a placeholder giving instructions for the game</p>
+          </div>
+        );
       } else {
-        infoParagraph =
-          "This is a placeholder for the results form the previously completed round";
+        return (
+          <div>
+            <p>
+              This is a placeholder for the results form the previously
+              completed round
+            </p>
+          </div>
+        );
       }
     }
-
-    return (
-      <div>
-        <p>{infoParagraph}</p>
-      </div>
-    );
   }
 }

@@ -24,7 +24,7 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div>
         <Nav
           toggleInRound={this.props.toggleInRound}
           toggleViewingStats={this.props.toggleViewingStats}
@@ -52,7 +52,7 @@ export default class Home extends React.Component {
             />
           )}
         </DimensionsProvider>
-      </React.Fragment>
+      </div>
     );
   }
 }

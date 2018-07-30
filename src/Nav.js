@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class Home extends React.Component {
+export default class Nav extends React.Component {
   static propTypes = {
     toggleInRound: PropTypes.func,
     toggleViewingStats: PropTypes.func,
@@ -42,7 +42,7 @@ export default class Home extends React.Component {
     return (
       <div>
         {buttons.map(button => {
-          <button onClick={button.func}>{button.name}</button>;
+          return <button onClick={button.func}>{button.name}</button>;
         })}
       </div>
     );

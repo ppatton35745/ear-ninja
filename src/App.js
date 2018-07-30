@@ -67,8 +67,9 @@ export default class App extends React.Component {
               disabled={isLoading}
               toggleInRound={this.toggleInRound}
               setRoundResults={this.setRoundResults}
+              roundResults={this.state.roundResults}
               inRound={this.state.inRound}
-              viewingStats={this.viewingStats}
+              viewingStats={this.state.viewingStats}
             />
           )}
         />
@@ -78,7 +79,7 @@ export default class App extends React.Component {
         <Stats
           toggleViewingStats={this.toggleViewingStats}
           inRound={this.state.inRound}
-          viewingStats={this.viewingStats}
+          viewingStats={this.state.viewingStats}
         />
       );
     } else {
@@ -96,7 +97,7 @@ export default class App extends React.Component {
               toggleViewingStats={this.toggleViewingStats}
               roundResults={this.state.roundResults}
               inRound={this.state.inRound}
-              viewingStats={this.viewingStats}
+              viewingStats={this.state.viewingStats}
             />
           )}
         />
