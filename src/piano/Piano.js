@@ -22,7 +22,8 @@ class Piano extends React.Component {
       })
     ),
     playbackNotes: PropTypes.arrayOf(PropTypes.number.isRequired),
-    hintNotes: PropTypes.arrayOf(PropTypes.number.isRequired)
+    hintNotes: PropTypes.arrayOf(PropTypes.number),
+    currentAnswerNotes: PropTypes.arrayOf(PropTypes.number)
   };
 
   static defaultProps = {

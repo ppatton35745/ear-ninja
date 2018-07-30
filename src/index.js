@@ -1,6 +1,6 @@
-import React from "../../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/react";
-import ReactDOM from "../../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/react-dom";
-import App from "./";
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
 import "./index.css";
 import "./Piano.css";
 

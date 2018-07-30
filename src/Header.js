@@ -7,7 +7,9 @@ export default class Header extends React.Component {
       inRound = PropTypes.bool,
       viewingStats = PropTypes.bool,
       roundResults = PropTypes.array,
-      timeRemaining = PropTypes.number
+      currentKey = PropTypes.string,
+      timeRemaining = PropTypes.number,
+      currentScore = PropTypes.object
   };
 
   constructor(props) {
@@ -15,20 +17,29 @@ export default class Header extends React.Component {
   }
 
   render() {
-      let colA = ""
+      let headerContent = null;
     
     if (!this.props.inRound && !this.props.viewingStats) {
         
         if (this.props.roundResults.length === 0) {
-            colA = "Welcome to Ear-Ninja"
+            headerContent = <span>Welcome to Ear-Ninja</span>
         } else {
-            colA = "Round Results:"
+            headerContent = <span>Round Results: </span>
         }
+    } else if (this.props.inRound) {
+        headerContent = <React.Fragment>
+                            <span>{`Time Remaining: ${this.props.timeRemaining}`}</span>
+                            <span>{`Current Key: ${this.props.currentKey}`}</span>
+                            <span>{`Current Score: ${this.props.currentScore.correct}/${this.props.currentScore.possible}`}</span>
+                        </React.Fragment>
+
+    } else if (this.props.viewingStats) {
+        headerContent = <span>Stats: </span>
     }
 
     return (
       <div>
-      <h2>{colA}</h2>
+      <h2>{headerContent}</h2>
       </div>
     )
   }
