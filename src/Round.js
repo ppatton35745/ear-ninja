@@ -1,8 +1,12 @@
 import React from "react";
 import ResponsivePiano from "./ResponsivePiano";
-import getInterval from "./tester/getIntervalgetInterval";
+import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
-import DimensionsProvider from "./DimensionsProvider";
+import DimensionsProvider from "./misc/DimensionsProvider";
+import PropTypes from "prop-types";
+import Nav from "./Nav";
+import Header from "./Header";
+import Info from "./Info";
 
 export default class Round extends React.Component {
   static propTypes = {
@@ -54,7 +58,7 @@ export default class Round extends React.Component {
     this.setState({ currentKey: this.musicKeys[randomKeyNum] });
   }
 
-  setCurrentQuestionNotes = () => {
+  setCurrentQuestionNotes = seedNote => {
     const notes = getInterval(
       seedNote,
       this.downPattern,
@@ -229,9 +233,9 @@ export default class Round extends React.Component {
           {({ containerWidth, containerHeight }) => (
             <ResponsivePiano
               width={containerWidth}
-              onPlayNote={playNote}
-              onStopNote={stopNote}
-              disabled={isLoading}
+              onPlayNote={this.props.onPlayNote}
+              onStopNote={this.props.onStopNote}
+              disabled={this.props.disabled}
               currentAnswerNotes={this.state.currentAnswerNotes}
               hintNotes={this.state.hintNotes}
               clear={this.clearCurrentAnswerNotes}

@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import "./index.css";
-import "./Piano.css";
+import "./styles/index.css";
+import "./styles/Piano.css";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
