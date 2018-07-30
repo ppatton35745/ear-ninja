@@ -10,7 +10,9 @@ export default class Round extends React.Component {
     setRoundResults: PropTypes.func.isRequired,
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    inRound: PropTypes.bool.isRequired,
+    viewingStats: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -199,9 +201,7 @@ export default class Round extends React.Component {
           currentKey={this.state.currentKey}
           currentScore={this.getScore()}
         />
-        <Info>
-          <h1>This is where "dead pianos"/completed questions info would go</h1>
-        </Info>
+        <Info completedQuestions={this.state.completedQuestions} />
         <DimensionsProvider>
           {({ containerWidth, containerHeight }) => (
             <ResponsivePiano

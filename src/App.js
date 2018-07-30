@@ -1,9 +1,8 @@
 import React from "react";
-import ResponsivePiano from "./ResponsivePiano";
-import Tester from "./tester/Tester";
-
-import DimensionsProvider from "./DimensionsProvider";
 import SoundfontProvider from "./SoundfontProvider";
+import Round from "./Round";
+import Home from "./Home";
+import Stats from "./Stats";
 
 // webkitAudioContext fallback needed to support Safari
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -68,12 +67,20 @@ export default class App extends React.Component {
               disabled={isLoading}
               toggleInRound={this.toggleInRound}
               setRoundResults={this.setRoundResults}
+              inRound={this.state.inRound}
+              viewingStats={this.viewingStats}
             />
           )}
         />
       );
     } else if (this.state.viewingStats) {
-      return <Stats toggleViewingStats={this.toggleViewingStats} />;
+      return (
+        <Stats
+          toggleViewingStats={this.toggleViewingStats}
+          inRound={this.state.inRound}
+          viewingStats={this.viewingStats}
+        />
+      );
     } else {
       return (
         <SoundfontProvider

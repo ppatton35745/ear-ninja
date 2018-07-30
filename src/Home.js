@@ -4,6 +4,9 @@ import ResponsivePiano from "./piano/ResponsivePiano";
 
 export default class Home extends React.Component {
   static propTypes = {
+    onPlayNote= PropTypes.func.isRequired,
+    onStopNote= PropTypes.func.isRequired,
+    disabled = PropTypes.bool.isRequired,
     toggleInRound: PropTypes.func.isRequired,
     toggleViewingStats: PropTypes.func.isRequired,
     roundResults: PropTypes.array.isRequired,
@@ -25,9 +28,9 @@ export default class Home extends React.Component {
           viewingStats={this.props.viewingStats}
         />
         <Header
-          roundResults={this.props.roundResults}
           inRound={this.props.inRound}
           viewingStats={this.props.viewingStats}
+          roundResults={this.props.roundResults}
         />
         <Info
           roundResults={this.props.roundResults}
