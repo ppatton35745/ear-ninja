@@ -14,156 +14,86 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      timeRemaining: 60,
-      currentKey: "",
-      currentQuestionNumber: 1,
-      currentQuestionNotes: [],
-      currentAnswerNotes: [],
-      completedQuestions: [],
-      initialPlay: false,
-      hintNotes: []
+      inRound: false,
+      roundResults: [],
+      viewingStats: false
     };
   }
 
-  setInitialPlay = () => {
-    this.setState({
-      initialPlay: true
-    });
-  };
-
-  setCurrentKey = key => {
-    this.setState({
-      currentKey: key
-    });
-  };
-
-  setCurrentQuestionNotes = notes => {
-    notes.sort();
-    this.setState({
-      currentQuestionNotes: notes
-    });
-  };
-
-  clearCurrentQuestionNotes = () => {
-    this.setState({
-      currentQuestionNotes: []
-    });
-  };
-
-  setCurrentAnswerNotes = notes => {
-    notes.sort();
-    this.setState({
-      currentAnswerNotes: notes
-    });
-  };
-
-  clearCurrentAnswerNotes = () => {
-    this.setState({
-      currentAnswerNotes: []
-    });
-  };
-
-  submitAnswer = () => {
-    this.state.completedQuestions.push({
-      key: this.state.currentKey,
-      questionNumber: this.state.currentQuestionNumber,
-      questionNotes: this.state.currentQuestionNotes,
-      answerNotes: this.state.currentAnswerNotes
-    });
-
-    this.setState({
-      currentKey: "",
-      currentQuestionNumber: this.state.currentQuestionNumber + 1,
-      currentQuestionNotes: [],
-      currentAnswerNotes: [],
-      initialPlay: false
-    });
-  };
-
-  startTimer() {
-    const timerInterval = setInterval(() => {
-      const timeRemaining = this.state.timeRemaining;
-      if (timeRemaining === 0) {
-        clearImmediate(timerInterval);
-      } else {
-        this.setState({
-          timeRemaining: timeRemaining - 1
-        });
-      }
-    }, 1000);
-  }
-
-  onHintNote = midiNumber => {
-    const isHint = this.state.hintNotes.includes(midiNumber);
-    if (isHint) {
-      return;
+  toggleInRound = () => {
+    if (this.state.inRound) {
+      this.setState({
+        inRound: false
+      });
+    } else {
+      this.setState({
+        inRound: true
+      });
     }
-
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.concat(midiNumber).sort()
-    }));
   };
 
-  offHintNote = midiNumber => {
-    const isNotHint = !this.state.hintNotes.includes(midiNumber);
-    if (isNotHint) {
-      return;
+  toggleViewingStats = () => {
+    if (this.state.viewingStats) {
+      this.setState({
+        viewingStats: false
+      });
+    } else {
+      this.setState({
+        viewingStats: true
+      });
     }
-
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.filter(note => midiNumber !== note)
-    }));
   };
 
-  componentDidMount() {
-    this.startTimer();
-  }
+  setRoundResults = results => {
+    this.setState({
+      roundResults: results
+    });
+  };
+
+  componentDidMount() {}
 
   componentDidUpdate() {}
 
   render() {
-    return (
-      <SoundfontProvider
-        instrumentName="acoustic_grand_piano"
-        audioContext={audioContext}
-        hostname={soundfontHostname}
-        render={({ isLoading, playNote, stopNote }) => (
-          <React.Fragment>
-            <Tester
+    if (this.state.inRound) {
+      return (
+        <SoundfontProvider
+          instrumentName="acoustic_grand_piano"
+          audioContext={audioContext}
+          hostname={soundfontHostname}
+          render={({ isLoading, playNote, stopNote }) => (
+            <Round
               onPlayNote={playNote}
               onStopNote={stopNote}
               disabled={isLoading}
-              timeRemaining={this.state.timeRemaining}
-              currentKey={this.state.currentKey}
-              setCurrentKey={this.setCurrentKey}
-              currentQuestionNotes={this.state.currentQuestionNotes}
-              setCurrentQuestionNotes={this.setCurrentQuestionNotes}
-              currentQuestionNumber={this.state.currentQuestionNumber}
-              clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
-              submitAnswer={this.submitAnswer}
-              initialPlay={this.state.initialPlay}
-              setInitialPlay={this.setInitialPlay}
-              onHintNote={this.onHintNote}
-              offHintNote={this.offHintNote}
-              hintNotes={this.state.hintNotes}
-              currentAnswerNotes={this.state.currentAnswerNotes}
+              toggleInRound={this.toggleInRound}
+              setRoundResults={this.setRoundResults}
             />
-            <DimensionsProvider>
-              {({ containerWidth, containerHeight }) => (
-                <ResponsivePiano
-                  width={containerWidth}
-                  onPlayNote={playNote}
-                  onStopNote={stopNote}
-                  disabled={isLoading}
-                  currentAnswerNotes={this.state.currentAnswerNotes}
-                  setCurrentAnswerNotes={this.setCurrentAnswerNotes}
-                  hintNotes={this.state.hintNotes}
-                />
-              )}
-            </DimensionsProvider>
-          </React.Fragment>
-        )}
-      />
-    );
+          )}
+        />
+      );
+    } else if (this.state.viewingStats) {
+      return <Stats toggleViewingStats={this.toggleViewingStats} />;
+    } else {
+      return (
+        <SoundfontProvider
+          instrumentName="acoustic_grand_piano"
+          audioContext={audioContext}
+          hostname={soundfontHostname}
+          render={({ isLoading, playNote, stopNote }) => (
+            <Home
+              onPlayNote={playNote}
+              onStopNote={stopNote}
+              disabled={isLoading}
+              toggleInRound={this.toggleInRound}
+              toggleViewingStats={this.toggleViewingStats}
+              roundResults={this.state.roundResults}
+              inRound={this.state.inRound}
+              viewingStats={this.viewingStats}
+            />
+          )}
+        />
+      );
+    }
   }
 }
