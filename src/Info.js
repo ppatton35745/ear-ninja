@@ -9,9 +9,9 @@ export default class Into extends React.Component {
     completedQuestions: PropTypes.array
   };
 
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
     if (this.props.inRound) {

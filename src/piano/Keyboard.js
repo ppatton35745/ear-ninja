@@ -66,7 +66,7 @@ class Keyboard extends React.Component {
         style={{ width: this.getWidth(), height: this.getHeight() }}
       >
         {this.getMidiNumbers().map(midiNumber => {
-          const { note, isAccidental } = MidiNumbers.getAttributes(midiNumber);
+          const { isAccidental } = MidiNumbers.getAttributes(midiNumber);
           const isActive = this.props.activeNotes.includes(midiNumber);
           const isAnswer = this.props.currentAnswerNotes
             ? this.props.currentAnswerNotes.includes(midiNumber)

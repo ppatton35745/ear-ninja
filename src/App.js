@@ -80,6 +80,7 @@ export default class App extends React.Component {
           toggleViewingStats={this.toggleViewingStats}
           inRound={this.state.inRound}
           viewingStats={this.state.viewingStats}
+          toggleInRound={this.toggleInRound}
         />
       );
     } else {

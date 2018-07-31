@@ -11,10 +11,6 @@ export default class Header extends React.Component {
     currentScore: PropTypes.object
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     if (this.props.inRound) {
       return (

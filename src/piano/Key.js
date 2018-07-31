@@ -12,8 +12,8 @@ class Key extends React.Component {
     useTouchEvents: PropTypes.bool.isRequired,
     accidental: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
-    isAnswer: PropTypes.bool.isRequired,
-    isHint: PropTypes.bool.isRequired,
+    isAnswer: PropTypes.bool,
+    isHint: PropTypes.bool,
     disabled: PropTypes.bool.isRequired,
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
@@ -118,7 +118,9 @@ class Key extends React.Component {
         }}
         onMouseDown={useTouchEvents ? null : this.playNote}
         onMouseUp={() => {
-          useTouchEvents ? null : this.stopNote();
+          if (!useTouchEvents) {
+            this.stopNote();
+          }
           if (this.props.timeRemaining === 0) {
             return;
           }

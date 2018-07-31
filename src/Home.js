@@ -18,10 +18,6 @@ export default class Home extends React.Component {
     viewingStats: PropTypes.bool.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
