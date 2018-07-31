@@ -90,6 +90,7 @@ class Keyboard extends React.Component {
               useTouchEvents={this.props.useTouchEvents}
               key={midiNumber}
               currentAnswerNotes={this.props.currentAnswerNotes}
+              timeRemaining={this.props.timeRemaining}
             >
               {this.props.disabled
                 ? null

@@ -15,7 +15,6 @@ export default class Round extends React.Component {
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
-    inRound: PropTypes.bool.isRequired,
     viewingStats: PropTypes.bool.isRequired
   };
 
@@ -67,7 +66,7 @@ export default class Round extends React.Component {
     );
     notes.sort();
     this.setState({
-      currentQuestionNumber: (this.state.currentQuestionNumber += 1),
+      currentQuestionNumber: this.state.currentQuestionNumber + 1,
       currentQuestionNotes: notes
     });
   };
@@ -112,15 +111,21 @@ export default class Round extends React.Component {
     }));
   };
 
-  playInterval() {
+  playInterval = () => {
     if (this.props.disabled) {
       return;
     }
+    if (this.props.timeRemaining === 0) {
+      return;
+    }
     hinter.playInterval(this.state.currentQuestionNotes, this.props.onPlayNote);
-  }
+  };
 
-  playTeasedInterval() {
+  playTeasedInterval = () => {
     if (this.props.disabled) {
+      return;
+    }
+    if (this.props.timeRemaining === 0) {
       return;
     }
 
@@ -128,10 +133,13 @@ export default class Round extends React.Component {
       this.state.currentQuestionNotes,
       this.props.onPlayNote
     );
-  }
+  };
 
-  playScale() {
+  playScale = () => {
     if (this.props.disabled) {
+      return;
+    }
+    if (this.props.timeRemaining === 0) {
       return;
     }
     const note = this.seedNotes[this.musicKeys.indexOf(this.state.currentKey)];
@@ -144,15 +152,21 @@ export default class Round extends React.Component {
       this.onHintNote,
       this.offHintNote
     );
-  }
+  };
 
   clearCurrentAnswerNotes = () => {
+    if (this.props.timeRemaining === 0) {
+      return;
+    }
     this.setState({
       currentAnswerNotes: []
     });
   };
 
   submitAnswer = () => {
+    if (this.props.timeRemaining === 0) {
+      return;
+    }
     this.state.completedQuestions.push({
       key: this.state.currentKey,
       questionNumber: this.state.currentQuestionNumber,
@@ -161,7 +175,6 @@ export default class Round extends React.Component {
     });
 
     this.setState({
-      currentKey: "",
       currentQuestionNumber: this.state.currentQuestionNumber + 1,
       currentQuestionNotes: [],
       currentAnswerNotes: [],
@@ -194,27 +207,33 @@ export default class Round extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
+  endRound = () => {
+    // make api calls to save round info
+    this.props.setRoundResults(this.state.completedQuestions);
+    this.props.toggleInRound();
+  };
+
   componentDidMount() {
     this.setCurrentKey();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.currentKey === "") {
-      console.log("setting current key");
-      this.setCurrentKey();
+    if (this.state.timeRemaining === 0) {
+      this.endRound();
     } else if (this.state.currentQuestionNotes.length === 0) {
-      console.log("setting current test notes");
-      this.setCurrentQuestionNotes(
-        this.seedNotes[this.musicKeys.indexOf(this.props.currentKey)]
-      );
+      const indexOfCurrentKey = this.musicKeys.indexOf(this.state.currentKey);
+      const seedNote = this.seedNotes[indexOfCurrentKey];
+      this.setCurrentQuestionNotes(seedNote);
     } else if (
       this.state.currentQuestionNumber !== prevState.currentQuestionNumber
     ) {
-      console.log("playing initial test");
-      this.playScale();
-      setTimeout(() => this.playInterval(), 4000);
+      if (this.state.currentQuestionNumber === 1) {
+        this.playScale();
+        setTimeout(() => this.playInterval(), 4000);
+      } else {
+        setTimeout(() => this.playInterval(), 100);
+      }
     } else if (!this.state.timerRunning) {
-      console.log("starting timer");
       this.startTimer();
       this.setState({
         timerRunning: true
@@ -229,6 +248,8 @@ export default class Round extends React.Component {
           playScale={this.playScale}
           playInterval={this.playInterval}
           playTeasedInterval={this.playTeasedInterval}
+          inRound={this.props.inRound}
+          viewingStats={this.props.viewingStats}
         />
         <Header
           timeRemaining={this.state.timeRemaining}
@@ -241,6 +262,10 @@ export default class Round extends React.Component {
           completedQuestions={this.state.completedQuestions}
           inRound={this.props.inRound}
         />
+        <div>
+          <button onClick={this.clearCurrentAnswerNotes}>Clear</button>
+          <button onClick={this.submitAnswer}>Submit</button>
+        </div>
         <DimensionsProvider>
           {({ containerWidth, containerHeight }) => (
             <ResponsivePiano
@@ -250,6 +275,7 @@ export default class Round extends React.Component {
               disabled={this.props.disabled}
               currentAnswerNotes={this.state.currentAnswerNotes}
               hintNotes={this.state.hintNotes}
+              timeRemaining={this.state.timeRemaining}
               // clear={this.clearCurrentAnswerNotes}
               // submit={this.submitAnswer}
             />

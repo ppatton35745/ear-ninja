@@ -20,7 +20,8 @@ class Key extends React.Component {
     accidentalWidthRatio: PropTypes.number.isRequired,
     pitchPositions: PropTypes.object.isRequired,
     children: PropTypes.node,
-    currentAnswerNotes: PropTypes.array
+    currentAnswerNotes: PropTypes.array,
+    timeRemaining: PropTypes.number
   };
 
   static defaultProps = {
@@ -118,6 +119,9 @@ class Key extends React.Component {
         onMouseDown={useTouchEvents ? null : this.playNote}
         onMouseUp={() => {
           useTouchEvents ? null : this.stopNote();
+          if (this.props.timeRemaining === 0) {
+            return;
+          }
           this.toggleCurrentAnswers();
         }}
         onMouseEnter={gliss ? this.playNote : null}

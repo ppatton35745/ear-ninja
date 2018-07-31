@@ -28,6 +28,9 @@ export default class ResponsivePiano extends React.Component {
           this.props.currentAnswerNotes ? this.props.currentAnswerNotes : null
         }
         hintNotes={this.props.hintNotes ? this.props.hintNotes : null}
+        timeRemaining={
+          this.props.timeRemaining ? this.props.timeRemaining : null
+        }
       />
     );
   }
