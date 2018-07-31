@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import DeadPiano from "./deadPiano/DeadPiano";
+import DimensionsProvider from "./misc/DimensionsProvider";
 
 export default class Into extends React.Component {
   static propTypes = {
@@ -35,11 +37,22 @@ export default class Into extends React.Component {
         );
       } else {
         return (
-          <div>
-            <p>
-              This is a placeholder for the results form the previously
-              completed round
-            </p>
+          <div className="deadPianos">
+            {this.props.roundResults.map(completedQuestion => {
+              return (
+                <div className="deadPiano" style={{ width: 30 + "%" }}>
+                  <DimensionsProvider>
+                    {({ containerWidth, containerHeight }) => (
+                      <DeadPiano
+                        width={containerWidth}
+                        completedQuestion={completedQuestion}
+                        inRound={this.props.inRound}
+                      />
+                    )}
+                  </DimensionsProvider>
+                </div>
+              );
+            })}
           </div>
         );
       }
