@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import DeadPiano from "./deadPiano/DeadPiano";
 import DimensionsProvider from "./misc/DimensionsProvider";
 
-export default class Into extends React.Component {
+export default class Info extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
     viewingStats: PropTypes.bool,
@@ -17,25 +17,31 @@ export default class Into extends React.Component {
 
   render() {
     if (this.props.inRound) {
-      return (
-        <React.Fragment>
-          {this.props.completedQuestions.map(completedQuestion => {
-            return (
-              <div className="deadPiano" style={{ width: 30 + "%" }}>
-                <DimensionsProvider>
-                  {({ containerWidth, containerHeight }) => (
-                    <DeadPiano
-                      width={containerWidth}
-                      completedQuestion={completedQuestion}
-                      inRound={this.props.inRound}
-                    />
-                  )}
-                </DimensionsProvider>
-              </div>
-            );
-          })}
-        </React.Fragment>
-      );
+      if (this.props.completedQuestions) {
+        if (this.props.completedQuestions.length > 0) {
+          return (
+            <React.Fragment>
+              {this.props.completedQuestions.map(completedQuestion => {
+                return (
+                  <div className="deadPiano" style={{ width: 30 + "%" }}>
+                    <DimensionsProvider>
+                      {({ containerWidth, containerHeight }) => (
+                        <DeadPiano
+                          width={containerWidth}
+                          completedQuestion={completedQuestion}
+                          inRound={this.props.inRound}
+                        />
+                      )}
+                    </DimensionsProvider>
+                  </div>
+                );
+              })}
+            </React.Fragment>
+          );
+        } else {
+          return null;
+        }
+      }
     } else if (this.props.viewingStats) {
       return (
         <React.Fragment>

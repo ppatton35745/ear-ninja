@@ -260,7 +260,7 @@ export default class Round extends React.Component {
           // viewingStats={this.props.viewingStats}
         />
         <Info
-          completedQuestion={this.state.completedQuestions}
+          completedQuestions={this.state.completedQuestions}
           inRound={this.props.inRound}
           viewingStats={this.props.viewingStats}
         />
