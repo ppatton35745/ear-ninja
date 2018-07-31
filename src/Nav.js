@@ -40,7 +40,7 @@ export default class Nav extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         {buttons.map(button => {
           return (
             <button key={button.key} onClick={button.func}>
@@ -48,7 +48,7 @@ export default class Nav extends React.Component {
             </button>
           );
         })}
-      </div>
+      </React.Fragment>
     );
   }
 }

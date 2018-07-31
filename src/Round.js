@@ -255,64 +255,36 @@ export default class Round extends React.Component {
         <Header
           timeRemaining={this.state.timeRemaining}
           currentKey={this.state.currentKey}
-          currentScore={this.getScore()}
+          currentScore={this.props.getScore(this.state.completedQuestions)}
           inRound={this.props.inRound}
           // viewingStats={this.props.viewingStats}
         />
-        {/* <Info
-          completedQuestions={this.state.completedQuestions}
+        <Info
+          completedQuestion={this.state.completedQuestions}
           inRound={this.props.inRound}
-        /> */}
-
-        {/* <DimensionsProvider className="deadPianos">
-          {({ containerWidth, containerHeight }) =>
-            this.state.completedQuestions.map(completedQuestion => {
-              return (
-                <DeadPiano
-                  width={containerWidth}
-                  completedQuestion={completedQuestion}
-                  inRound={this.props.inRound}
-                />
-              );
-            })
-          }
-        </DimensionsProvider> */}
-        <div className="deadPianos">
-          {this.state.completedQuestions.map(completedQuestion => {
-            return (
-              <div className="deadPiano" style={{ width: 30 + "%" }}>
-                <DimensionsProvider>
-                  {({ containerWidth, containerHeight }) => (
-                    <DeadPiano
-                      width={containerWidth}
-                      completedQuestion={completedQuestion}
-                      inRound={this.props.inRound}
-                    />
-                  )}
-                </DimensionsProvider>
-              </div>
-            );
-          })}
-        </div>
-        <div>
+          viewingStats={this.props.viewingStats}
+        />
+        <div className="submitControl">
           <button onClick={this.clearCurrentAnswerNotes}>Clear</button>
           <button onClick={this.submitAnswer}>Submit</button>
         </div>
-        <DimensionsProvider>
-          {({ containerWidth, containerHeight }) => (
-            <ResponsivePiano
-              width={containerWidth}
-              onPlayNote={this.props.onPlayNote}
-              onStopNote={this.props.onStopNote}
-              disabled={this.props.disabled}
-              currentAnswerNotes={this.state.currentAnswerNotes}
-              hintNotes={this.state.hintNotes}
-              timeRemaining={this.state.timeRemaining}
-              // clear={this.clearCurrentAnswerNotes}
-              // submit={this.submitAnswer}
-            />
-          )}
-        </DimensionsProvider>
+        <div className="responsivePiano" style={{ width: 100 + "%" }}>
+          <DimensionsProvider>
+            {({ containerWidth, containerHeight }) => (
+              <ResponsivePiano
+                width={containerWidth}
+                onPlayNote={this.props.onPlayNote}
+                onStopNote={this.props.onStopNote}
+                disabled={this.props.disabled}
+                currentAnswerNotes={this.state.currentAnswerNotes}
+                hintNotes={this.state.hintNotes}
+                timeRemaining={this.state.timeRemaining}
+                // clear={this.clearCurrentAnswerNotes}
+                // submit={this.submitAnswer}
+              />
+            )}
+          </DimensionsProvider>
+        </div>
       </React.Fragment>
     );
   }

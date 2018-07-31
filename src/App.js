@@ -49,6 +49,31 @@ export default class App extends React.Component {
     });
   };
 
+  getScore = results => {
+    let questions = 0;
+    let correctAnswers = 0;
+    results.forEach(question => {
+      let correct = true;
+
+      if (question.questionNotes.length === question.answerNotes.length) {
+        question.questionNotes.forEach((questionNote, index) => {
+          if (questionNote !== question.answerNotes[index]) {
+            correct = false;
+          }
+        });
+      } else {
+        correct = false;
+      }
+
+      questions += 1;
+      if (correct) {
+        correctAnswers += 1;
+      }
+    });
+
+    return { possible: questions, correct: correctAnswers };
+  };
+
   componentDidMount() {}
 
   componentDidUpdate() {}
@@ -70,6 +95,7 @@ export default class App extends React.Component {
               roundResults={this.state.roundResults}
               inRound={this.state.inRound}
               viewingStats={this.state.viewingStats}
+              getScore={this.getScore}
             />
           )}
         />
@@ -99,6 +125,7 @@ export default class App extends React.Component {
               roundResults={this.state.roundResults}
               inRound={this.state.inRound}
               viewingStats={this.state.viewingStats}
+              getScore={this.getScore}
             />
           )}
         />

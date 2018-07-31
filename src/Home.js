@@ -20,35 +20,80 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <div>
-        <Nav
-          toggleInRound={this.props.toggleInRound}
-          toggleViewingStats={this.props.toggleViewingStats}
-          inRound={this.props.inRound}
-          viewingStats={this.props.viewingStats}
-        />
-        <Header
-          inRound={this.props.inRound}
-          viewingStats={this.props.viewingStats}
-          roundResults={this.props.roundResults}
-        />
-        <Info
-          roundResults={this.props.roundResults}
-          inRound={this.props.inRound}
-          viewingStats={this.props.viewingStats}
-        />
+      <DimensionsProvider className="dimensionProvider">
+        {({ containerWidth, containerHeight }) => (
+          <div className="container">
+            <div
+              className="nav"
+              style={{
+                width: containerWidth,
+                height: (containerHeight - containerWidth * 0.27) * 0.15
+              }}
+            >
+              <Nav
+                toggleInRound={this.props.toggleInRound}
+                toggleViewingStats={this.props.toggleViewingStats}
+                inRound={this.props.inRound}
+                viewingStats={this.props.viewingStats}
+              />
+            </div>
 
-        <DimensionsProvider>
-          {({ containerWidth, containerHeight }) => (
-            <ResponsivePiano
-              width={containerWidth}
-              onPlayNote={this.props.onPlayNote}
-              onStopNote={this.props.onStopNote}
-              disabled={this.props.disabled}
+            <div
+              className="header"
+              style={{
+                width: containerWidth,
+                height: (containerHeight - containerWidth * 0.27) * 0.1
+              }}
+            >
+              <Header
+                inRound={this.props.inRound}
+                viewingStats={this.props.viewingStats}
+                roundResults={this.props.roundResults}
+                currentScore={this.props.getScore(this.props.roundResults)}
+              />
+            </div>
+
+            <div
+              className="info"
+              style={{
+                width: containerWidth,
+                height: (containerHeight - containerWidth * 0.27) * 0.6
+              }}
+            >
+              <Info
+                roundResults={this.props.roundResults}
+                inRound={this.props.inRound}
+                viewingStats={this.props.viewingStats}
+              />
+            </div>
+
+            <div
+              className="submitControl"
+              style={{
+                width: containerWidth,
+                height: (containerHeight - containerWidth * 0.27) * 0.15
+              }}
             />
-          )}
-        </DimensionsProvider>
-      </div>
+
+            <div
+              className="responsivePianoContainer"
+              style={{ width: containerWidth, height: containerWidth * 0.27 }}
+            >
+              <div
+                className="responsivePiano"
+                style={{ width: containerWidth * 0.9 }}
+              >
+                <ResponsivePiano
+                  width={containerWidth * 0.9}
+                  onPlayNote={this.props.onPlayNote}
+                  onStopNote={this.props.onStopNote}
+                  disabled={this.props.disabled}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </DimensionsProvider>
     );
   }
 }

@@ -18,26 +18,40 @@ export default class Into extends React.Component {
   render() {
     if (this.props.inRound) {
       return (
-        <div>
-          <p>This is a placeholder for the current round score</p>
-        </div>
+        <React.Fragment>
+          {this.props.completedQuestions.map(completedQuestion => {
+            return (
+              <div className="deadPiano" style={{ width: 30 + "%" }}>
+                <DimensionsProvider>
+                  {({ containerWidth, containerHeight }) => (
+                    <DeadPiano
+                      width={containerWidth}
+                      completedQuestion={completedQuestion}
+                      inRound={this.props.inRound}
+                    />
+                  )}
+                </DimensionsProvider>
+              </div>
+            );
+          })}
+        </React.Fragment>
       );
     } else if (this.props.viewingStats) {
       return (
-        <div>
+        <React.Fragment>
           <p>This is a placeholder for stats info</p>
-        </div>
+        </React.Fragment>
       );
     } else {
       if (this.props.roundResults.length === 0) {
         return (
-          <div>
+          <React.Fragment>
             <p>This is a placeholder giving instructions for the game</p>
-          </div>
+          </React.Fragment>
         );
       } else {
         return (
-          <div className="deadPianos">
+          <React.Fragment>
             {this.props.roundResults.map(completedQuestion => {
               return (
                 <div className="deadPiano" style={{ width: 30 + "%" }}>
@@ -53,7 +67,7 @@ export default class Into extends React.Component {
                 </div>
               );
             })}
-          </div>
+          </React.Fragment>
         );
       }
     }

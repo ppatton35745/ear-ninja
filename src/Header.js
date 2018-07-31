@@ -14,34 +14,39 @@ export default class Header extends React.Component {
   render() {
     if (this.props.inRound) {
       return (
-        <div>
+        <React.Fragment>
           <h2>
             <span>{`Time Remaining: ${this.props.timeRemaining}`}</span>
-            <span>{`Current Key: ${this.props.currentKey}`}</span>
-            <span>{`Current Score: ${this.props.currentScore.correct}/${
+            <span>{`Key: ${this.props.currentKey}`}</span>
+            <span>{`Score: ${this.props.currentScore.correct}/${
               this.props.currentScore.possible
             }`}</span>
           </h2>
-        </div>
+        </React.Fragment>
       );
     } else if (this.props.viewingStats) {
       return (
-        <div>
+        <React.Fragment>
           <h2>Stats: </h2>
-        </div>
+        </React.Fragment>
       );
     } else {
       if (this.props.roundResults.length === 0) {
         return (
-          <div>
+          <React.Fragment>
             <h2>Welcome to Ear-Ninja</h2>
-          </div>
+          </React.Fragment>
         );
       } else {
         return (
-          <div>
-            <h2>Round Results: </h2>
-          </div>
+          <React.Fragment>
+            <h2>
+              <span>Round Complete!</span>
+              <span>{`Score: ${this.props.currentScore.correct}/${
+                this.props.currentScore.possible
+              }`}</span>
+            </h2>
+          </React.Fragment>
         );
       }
     }
