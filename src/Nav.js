@@ -14,13 +14,6 @@ export default class Nav extends React.Component {
 
   render() {
     let buttons = [];
-    console.log("buttons before", buttons);
-    console.log(
-      "inRound",
-      this.props.inRound,
-      "viewingState",
-      this.props.viewingStats
-    );
 
     if (!this.props.inRound && !this.props.viewingStats) {
       buttons = [
@@ -45,8 +38,6 @@ export default class Nav extends React.Component {
         // { name: "Logout", func: this.props.logout }
       ];
     }
-
-    console.log("buttons after", buttons);
 
     return (
       <div>

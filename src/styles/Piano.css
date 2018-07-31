@@ -53,18 +53,18 @@
    * Styles of "answered" or selected keys
    */
 .ReactPiano__Key--answer {
-  background: purple;
+  background: orange;
 }
 
 .ReactPiano__Key--answer.ReactPiano__Key--accidental {
   border: 1px solid #fff;
-  border-top: 1px solid purple;
+  border-top: 1px solid orange;
   /* Slight height reduction for "pushed-down" effect */
   height: 65%;
 }
 
 .ReactPiano__Key--answer.ReactPiano__Key--natural {
-  border: 1px solid purple;
+  border: 1px solid orange;
   /* Slight height reduction for "pushed-down" effect */
   height: 98%;
 }
@@ -73,18 +73,18 @@
    * Styles of "hint"  keys
    */
 .ReactPiano__Key--hint {
-  background: orange;
+  background: purple;
 }
 
 .ReactPiano__Key--hint.ReactPiano__Key--accidental {
   border: 1px solid #fff;
-  border-top: 1px solid orange;
+  border-top: 1px solid purple;
   /* Slight height reduction for "pushed-down" effect */
   height: 65%;
 }
 
 .ReactPiano__Key--hint.ReactPiano__Key--natural {
-  border: 1px solid orange;
+  border: 1px solid purple;
   /* Slight height reduction for "pushed-down" effect */
   height: 98%;
 }
@@ -107,6 +107,23 @@
   border: 1px solid #3ac8da;
   /* Slight height reduction for "pushed-down" effect */
   height: 98%;
+}
+
+.ReactPiano__Key--correctAnswer {
+  background-color: green;
+}
+
+.ReactPiano__Key--guessedAnswer.ReactPiano__Key--accidental {
+  border: 5px solid orange;
+  /* border-top: 1px solid purple; */
+  /* Slight height reduction for "pushed-down" effect */
+  height: 58%; /* was 65% */
+}
+
+.ReactPiano__Key--guessedAnswer.ReactPiano__Key--natural {
+  border: 5px solid orange;
+  /* Slight height reduction for "pushed-down" effect */
+  height: 91%; /* was 98% */
 }
 
 /*

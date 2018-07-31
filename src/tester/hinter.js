@@ -1,6 +1,5 @@
 export default class hinter {
   static playInterval = (notes, play) => {
-    console.log("notes", notes, "play", play);
     notes.forEach(note => {
       play(note);
     });

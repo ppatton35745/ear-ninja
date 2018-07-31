@@ -5,24 +5,16 @@ export default function getInterval(
   noteRangeMin,
   noteRangeMax
 ) {
-  console.log("I'm running get interval");
-  console.log("seed note", seedNote);
   const scalarNotes = [];
   let i = seedNote;
   let j = 0;
 
-  console.log("empty scalar notes", scalarNotes);
-
   scalarNotes.push(i);
-
-  console.log("added first note", scalarNotes);
 
   while ((i -= downPattern[j % 7]) >= noteRangeMin) {
     scalarNotes.push(i);
     j++;
   }
-
-  console.log("added down patter", scalarNotes);
 
   i = seedNote;
   j = 0;
@@ -32,11 +24,7 @@ export default function getInterval(
     j++;
   }
 
-  console.log("added up pattern", scalarNotes);
-
   scalarNotes.sort();
-
-  console.log("sorted scalar notes", scalarNotes);
 
   const notes = [];
 
@@ -45,6 +33,5 @@ export default function getInterval(
   }
 
   notes.sort();
-  console.log("the sorted/selected notes we're going to return", notes);
   return notes;
 }

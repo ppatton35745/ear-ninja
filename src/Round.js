@@ -1,5 +1,6 @@
 import React from "react";
 import ResponsivePiano from "./ResponsivePiano";
+import DeadPiano from "./deadPiano/DeadPiano";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import DimensionsProvider from "./misc/DimensionsProvider";
@@ -258,10 +259,25 @@ export default class Round extends React.Component {
           inRound={this.props.inRound}
           // viewingStats={this.props.viewingStats}
         />
-        <Info
+        {/* <Info
           completedQuestions={this.state.completedQuestions}
           inRound={this.props.inRound}
-        />
+        /> */}
+        <div className="deadPiano">
+          <DimensionsProvider>
+            {({ containerWidth, containerHeight }) =>
+              this.state.completedQuestions.map(completedQuestion => {
+                return (
+                  <DeadPiano
+                    width={containerWidth}
+                    completedQuestion={completedQuestion}
+                    inRound={this.props.inRound}
+                  />
+                );
+              })
+            }
+          </DimensionsProvider>
+        </div>
         <div>
           <button onClick={this.clearCurrentAnswerNotes}>Clear</button>
           <button onClick={this.submitAnswer}>Submit</button>
