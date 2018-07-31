@@ -263,20 +263,36 @@ export default class Round extends React.Component {
           completedQuestions={this.state.completedQuestions}
           inRound={this.props.inRound}
         /> */}
-        <div className="deadPiano">
-          <DimensionsProvider>
-            {({ containerWidth, containerHeight }) =>
-              this.state.completedQuestions.map(completedQuestion => {
-                return (
-                  <DeadPiano
-                    width={containerWidth}
-                    completedQuestion={completedQuestion}
-                    inRound={this.props.inRound}
-                  />
-                );
-              })
-            }
-          </DimensionsProvider>
+
+        {/* <DimensionsProvider className="deadPianos">
+          {({ containerWidth, containerHeight }) =>
+            this.state.completedQuestions.map(completedQuestion => {
+              return (
+                <DeadPiano
+                  width={containerWidth}
+                  completedQuestion={completedQuestion}
+                  inRound={this.props.inRound}
+                />
+              );
+            })
+          }
+        </DimensionsProvider> */}
+        <div className="deadPianos">
+          {this.state.completedQuestions.map(completedQuestion => {
+            return (
+              <div className="deadPiano" style={{ width: 30 + "%" }}>
+                <DimensionsProvider>
+                  {({ containerWidth, containerHeight }) => (
+                    <DeadPiano
+                      width={containerWidth}
+                      completedQuestion={completedQuestion}
+                      inRound={this.props.inRound}
+                    />
+                  )}
+                </DimensionsProvider>
+              </div>
+            );
+          })}
         </div>
         <div>
           <button onClick={this.clearCurrentAnswerNotes}>Clear</button>

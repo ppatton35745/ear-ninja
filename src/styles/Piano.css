@@ -109,23 +109,6 @@
   height: 98%;
 }
 
-.ReactPiano__Key--correctAnswer {
-  background-color: green;
-}
-
-.ReactPiano__Key--guessedAnswer.ReactPiano__Key--accidental {
-  border: 5px solid orange;
-  /* border-top: 1px solid purple; */
-  /* Slight height reduction for "pushed-down" effect */
-  height: 58%; /* was 65% */
-}
-
-.ReactPiano__Key--guessedAnswer.ReactPiano__Key--natural {
-  border: 5px solid orange;
-  /* Slight height reduction for "pushed-down" effect */
-  height: 91%; /* was 98% */
-}
-
 /*
    * Styles for disabled state
    */
