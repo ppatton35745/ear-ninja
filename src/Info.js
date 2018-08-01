@@ -26,7 +26,7 @@ export default class Info extends React.Component {
         <React.Fragment>
           {this.props.completedQuestions.map(completedQuestion => {
             return (
-              <div className="deadPiano" style={{ width: 30 + "%" }}>
+              <div className="deadPiano">
                 <DimensionsProvider>
                   {({ containerWidth, containerHeight }) => (
                     <DeadPiano

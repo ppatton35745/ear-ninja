@@ -1,10 +1,6 @@
-.info {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-content: space-around;
+.deadPiano {
+  width: 31%;
+  margin: 1%;
 }
 
 .ReactPiano__Key--correctAnswer {

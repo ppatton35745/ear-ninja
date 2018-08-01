@@ -288,17 +288,24 @@ export default class Home extends React.Component {
     if (this.state.inRound) {
       submitControlButtons = (
         <React.Fragment>
-          <button onClick={this.clearCurrentAnswerNotes}>Clear</button>
-          <button onClick={this.submitAnswer}>Submit</button>
+          <button
+            onClick={this.clearCurrentAnswerNotes}
+            className="btn btn-outline-light"
+          >
+            Clear
+          </button>
+          <button onClick={this.submitAnswer} className="btn btn-outline-light">
+            Submit
+          </button>
         </React.Fragment>
       );
     }
     return (
-      <div className="container">
+      <div className="homeContainer">
         <div
           className="nav"
           style={{
-            width: this.props.containerWidth,
+            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.15
@@ -318,7 +325,7 @@ export default class Home extends React.Component {
         <div
           className="header"
           style={{
-            width: this.props.containerWidth,
+            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.1
@@ -337,7 +344,7 @@ export default class Home extends React.Component {
         <div
           className="info"
           style={{
-            width: this.props.containerWidth,
+            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.6
@@ -352,7 +359,7 @@ export default class Home extends React.Component {
         <div
           className="submitControl"
           style={{
-            width: this.props.containerWidth,
+            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.15
@@ -364,7 +371,7 @@ export default class Home extends React.Component {
         <div
           className="responsivePianoContainer"
           style={{
-            width: this.props.containerWidth,
+            // width: this.props.containerWidth,
             height: this.props.containerWidth * 0.27
           }}
         >

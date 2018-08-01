@@ -43,7 +43,11 @@ export default class Nav extends React.Component {
       <React.Fragment>
         {buttons.map(button => {
           return (
-            <button key={button.key} onClick={button.func}>
+            <button
+              key={button.key}
+              onClick={button.func}
+              className="btn btn-outline-light"
+            >
               {button.name}
             </button>
           );

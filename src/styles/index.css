@@ -10,53 +10,11 @@ body {
   height: 100%;
 }
 
-.container {
+.homeContainer {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.nav {
-  height: 10%;
-}
-
-.header {
-  height: 10%;
-}
-
-.header h2 {
   margin: 0;
+  padding: 0;
 }
-
-.info {
-  height: 40%;
-}
-
-.submitControl {
-  background-color: black;
-}
-
-.responsivePianoContainer {
-  height: 40%;
-  width: 100%;
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-}
-
-/* .responsiveKeyboardContainer {
-  margin: auto;
-}
-
-.responsivePiano {
-  margin: auto;
-
-  height: 50%;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  align-self: center; 
-} */

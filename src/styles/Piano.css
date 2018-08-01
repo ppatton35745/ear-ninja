@@ -1,3 +1,13 @@
+.responsivePianoContainer {
+  height: 40%;
+  width: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 .ReactPiano__Keyboard {
   /* Used for absolute positioning of .ReactPiano__Key--accidental elements */
   position: relative;
