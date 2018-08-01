@@ -5,7 +5,7 @@ export default class Header extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
     viewingStats: PropTypes.bool,
-    roundResults: PropTypes.array,
+    completedQuestions: PropTypes.array,
     currentKey: PropTypes.string,
     timeRemaining: PropTypes.number,
     currentScore: PropTypes.object
@@ -24,14 +24,8 @@ export default class Header extends React.Component {
           </h2>
         </React.Fragment>
       );
-    } else if (this.props.viewingStats) {
-      return (
-        <React.Fragment>
-          <h2>Stats: </h2>
-        </React.Fragment>
-      );
     } else {
-      if (this.props.roundResults.length === 0) {
+      if (this.props.completedQuestions.length === 0) {
         return (
           <React.Fragment>
             <h2>Welcome to Ear-Ninja</h2>

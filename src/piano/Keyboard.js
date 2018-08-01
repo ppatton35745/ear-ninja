@@ -91,6 +91,7 @@ class Keyboard extends React.Component {
               key={midiNumber}
               currentAnswerNotes={this.props.currentAnswerNotes}
               timeRemaining={this.props.timeRemaining}
+              inRound={this.props.inRound}
             >
               {this.props.disabled
                 ? null

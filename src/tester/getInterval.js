@@ -28,8 +28,12 @@ export default function getInterval(
 
   const notes = [];
 
-  for (let i = 0; i < 2; i++) {
-    notes.push(scalarNotes[Math.floor(Math.random() * scalarNotes.length)]);
+  while (notes.length < 2) {
+    const randomNote =
+      scalarNotes[Math.floor(Math.random() * scalarNotes.length)];
+    if (!notes.includes(randomNote)) {
+      notes.push(randomNote);
+    }
   }
 
   notes.sort();

@@ -17,8 +17,8 @@ export default class Nav extends React.Component {
 
     if (!this.props.inRound && !this.props.viewingStats) {
       buttons = [
-        { key: 1, name: "Play Round", func: this.props.toggleInRound },
-        { key: 2, name: "View Stats", func: this.props.toggleViewingStats }
+        { key: 1, name: "Play Round", func: this.props.startRound },
+        { key: 2, name: "View Stats", func: this.props.startRound }
         // { name: "Logout", func: this.props.logout }
       ];
     } else if (this.props.inRound) {
@@ -33,8 +33,8 @@ export default class Nav extends React.Component {
       ];
     } else if (this.props.viewingStats) {
       buttons = [
-        { key: 1, name: "Play Round", func: this.props.toggleInRound },
-        { key: 2, name: "Home", func: this.props.toggleViewingStats }
+        { key: 1, name: "Play Round", func: this.props.startRound },
+        { key: 2, name: "Home", func: this.props.startRound }
         // { name: "Logout", func: this.props.logout }
       ];
     }

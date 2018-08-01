@@ -218,6 +218,7 @@ class Piano extends React.Component {
         currentAnswerNotes={this.props.currentAnswerNotes}
         hintNotes={this.props.hintNotes}
         timeRemaining={this.props.timeRemaining}
+        inRound={this.props.inRound}
       />
     );
   }

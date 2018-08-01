@@ -21,7 +21,8 @@ class Key extends React.Component {
     pitchPositions: PropTypes.object.isRequired,
     children: PropTypes.node,
     currentAnswerNotes: PropTypes.array,
-    timeRemaining: PropTypes.number
+    timeRemaining: PropTypes.number,
+    inRound: PropTypes.bool
   };
 
   static defaultProps = {
@@ -67,7 +68,7 @@ class Key extends React.Component {
   }
 
   toggleCurrentAnswers() {
-    if (!this.props.currentAnswerNotes) {
+    if (this.props.inRound !== true || this.props.timeRemaining <= 0) {
       return;
     }
     const answerIndex = this.props.currentAnswerNotes.indexOf(
