@@ -10,10 +10,14 @@ export default class Info extends React.Component {
     completedQuestions: PropTypes.array
   };
 
-  // constructor(props) {
-  //   super(props);
-  // }
-
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.completedQuestions.length !==
+      prevProps.completedQuestions.length
+    ) {
+      this.props.scrollInfoToBottom();
+    }
+  }
   render() {
     if (this.props.viewingStats) {
       return (

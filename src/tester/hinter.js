@@ -1,7 +1,30 @@
 export default class hinter {
-  static playInterval = (notes, play) => {
+  static playInterval = (
+    notes,
+    play,
+    hinted,
+    stop,
+    onHintNote,
+    offHintNote
+  ) => {
     notes.forEach(note => {
-      play(note);
+      if (hinted) {
+        setTimeout(() => {
+          play(note);
+        }, 0);
+        setTimeout(() => {
+          onHintNote(note);
+        }, 10);
+
+        setTimeout(() => {
+          stop(note);
+        }, 600);
+        setTimeout(() => {
+          offHintNote(note);
+        }, 10 + 600);
+      } else {
+        play(note);
+      }
     });
   };
 
