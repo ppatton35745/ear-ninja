@@ -1,0 +1,21 @@
+.deadPiano {
+  width: 31%;
+  margin: 1%;
+}
+
+.ReactPiano__Key--correctAnswer {
+  background-color: green;
+}
+
+.ReactPiano__Key--guessedAnswer.ReactPiano__Key--accidental {
+  border: 2px solid orange;
+  /* border-top: 1px solid purple; */
+  /* Slight height reduction for "pushed-down" effect */
+  height: 64%; /* was 65% */
+}
+
+.ReactPiano__Key--guessedAnswer.ReactPiano__Key--natural {
+  border: 2px solid orange;
+  /* Slight height reduction for "pushed-down" effect */
+  height: 97%; /* was 98% */
+}

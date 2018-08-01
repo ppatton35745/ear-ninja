@@ -2,31 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import range from "lodash.range";
 
-import Key from "./Key";
-import MidiNumbers from "./MidiNumbers";
+import DeadKey from "./DeadKey";
+import MidiNumbers from "../piano/MidiNumbers";
 
-class Keyboard extends React.Component {
+class DeadKeyboard extends React.Component {
   static propTypes = {
     noteRange: noteRangePropType,
-    activeNotes: PropTypes.arrayOf(PropTypes.number),
-    hintNotes: PropTypes.arrayOf(PropTypes.number),
-    onPlayNote: PropTypes.func.isRequired,
-    onStopNote: PropTypes.func.isRequired,
-    renderNoteLabel: PropTypes.func.isRequired,
     keyWidthToHeight: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
-    gliss: PropTypes.bool,
-    useTouchEvents: PropTypes.bool,
-    // If width is not provided, must have fixed width and height in parent container
-    width: PropTypes.number
+    width: PropTypes.number,
+    completedQuestion: PropTypes.object
   };
 
   static defaultProps = {
-    disabled: false,
-    gliss: false,
-    useTouchEvents: false,
-    keyWidthToHeight: 0.25,
-    renderNoteLabel: () => {}
+    keyWidthToHeight: 0.25
   };
 
   // Range of midi numbers on keyboard
@@ -67,40 +55,22 @@ class Keyboard extends React.Component {
       >
         {this.getMidiNumbers().map(midiNumber => {
           const { isAccidental } = MidiNumbers.getAttributes(midiNumber);
-          const isActive = this.props.activeNotes.includes(midiNumber);
-          const isAnswer = this.props.currentAnswerNotes
-            ? this.props.currentAnswerNotes.includes(midiNumber)
-            : null;
-          const isHint = this.props.hintNotes
-            ? this.props.hintNotes.includes(midiNumber)
-            : null;
+          const isGuessedAnswer = this.props.completedQuestion.answerNotes.includes(
+            midiNumber
+          );
+          const isCorrectAnswer = this.props.completedQuestion.questionNotes.includes(
+            midiNumber
+          );
           return (
-            <Key
+            <DeadKey
               naturalKeyWidth={naturalKeyWidth}
               midiNumber={midiNumber}
               noteRange={this.props.noteRange}
-              active={isActive}
-              isAnswer={isAnswer}
-              isHint={isHint}
               accidental={isAccidental}
-              disabled={this.props.disabled}
-              onPlayNote={this.props.onPlayNote}
-              onStopNote={this.props.onStopNote}
-              gliss={this.props.gliss}
-              useTouchEvents={this.props.useTouchEvents}
               key={midiNumber}
-              currentAnswerNotes={this.props.currentAnswerNotes}
-              timeRemaining={this.props.timeRemaining}
-              inRound={this.props.inRound}
-            >
-              {this.props.disabled
-                ? null
-                : this.props.renderNoteLabel({
-                    isActive,
-                    isAccidental,
-                    midiNumber
-                  })}
-            </Key>
+              isCorrectAnswer={isCorrectAnswer}
+              isGuessedAnswer={isGuessedAnswer}
+            />
           );
         })}
       </div>
@@ -134,4 +104,4 @@ function noteRangePropType(props, propName, componentName) {
   }
 }
 
-export default Keyboard;
+export default DeadKeyboard;
