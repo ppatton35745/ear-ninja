@@ -30,7 +30,8 @@ export default class Home extends React.Component {
       completedQuestions: [],
       hintNotes: [],
       inRound: false,
-      timerRunning: false
+      timerRunning: false,
+      submitAnswerDisabled: false
     };
     this.musicKeys = [
       "C",
@@ -82,20 +83,16 @@ export default class Home extends React.Component {
   };
 
   startTimer() {
-    console.log("initializing timer");
     const timerInterval = setInterval(() => {
       const timeRemaining = this.state.timeRemaining;
       if (this.state.inRound && !this.state.timerRunning) {
-        console.log("setting timer");
         this.setState({
           timeRemaining: 60,
           timerRunning: true
         });
       } else if (!this.state.inRound) {
-        console.log("clearing timer");
         clearInterval(timerInterval);
       } else {
-        console.log("incrementing timer");
         this.setState({
           timeRemaining: timeRemaining - 1
         });
@@ -194,9 +191,12 @@ export default class Home extends React.Component {
   };
 
   submitAnswer = () => {
-    if (this.props.timeRemaining <= 0) {
+    if (this.state.submitAnswerDisabled || this.props.timeRemaining <= 0) {
       return;
     }
+
+    this.setState({});
+
     this.state.completedQuestions.push({
       key: this.state.currentKey,
       questionNumber: this.state.currentQuestionNumber,
@@ -204,32 +204,86 @@ export default class Home extends React.Component {
       answerNotes: this.state.currentAnswerNotes
     });
 
-    this.setState({
-      currentQuestionNumber: this.state.currentQuestionNumber + 1,
-      currentQuestionNotes: [],
-      currentAnswerNotes: [],
-      initialPlay: false
-    });
+    if (
+      !this.isCorrect(
+        this.state.currentQuestionNotes,
+        this.state.currentAnswerNotes
+      )
+    ) {
+      console.log("not correct playing first interval");
+      hinter.playInterval(
+        this.state.currentQuestionNotes,
+        this.props.onPlayNote,
+        true,
+        this.props.onStopNote,
+        this.onHintNote,
+        this.offHintNote
+      );
+
+      setTimeout(() => {
+        console.log("second interval");
+        hinter.playInterval(
+          this.state.currentAnswerNotes,
+          this.props.onPlayNote,
+          true,
+          this.props.onStopNote,
+          this.onHintNote,
+          this.offHintNote
+        );
+      }, 700);
+
+      setTimeout(() => {
+        console.log("third interval");
+        hinter.playInterval(
+          this.state.currentQuestionNotes,
+          this.props.onPlayNote,
+          true,
+          this.props.onStopNote,
+          this.onHintNote,
+          this.offHintNote
+        );
+      }, 1400);
+
+      setTimeout(() => {
+        this.setState({
+          currentQuestionNumber: this.state.currentQuestionNumber + 1,
+          currentQuestionNotes: [],
+          currentAnswerNotes: [],
+          initialPlay: false
+        });
+      }, 2100);
+    } else {
+      this.setState({
+        currentQuestionNumber: this.state.currentQuestionNumber + 1,
+        currentQuestionNotes: [],
+        currentAnswerNotes: [],
+        initialPlay: false
+      });
+    }
+  };
+
+  isCorrect = (questionNotes, answerNotes) => {
+    let correct = true;
+
+    if (questionNotes.length === answerNotes.length) {
+      questionNotes.forEach((questionNote, index) => {
+        if (questionNote !== answerNotes[index]) {
+          correct = false;
+        }
+      });
+    } else {
+      correct = false;
+    }
+    return correct;
   };
 
   getScore = () => {
     let questions = 0;
     let correctAnswers = 0;
     this.state.completedQuestions.forEach(question => {
-      let correct = true;
-
-      if (question.questionNotes.length === question.answerNotes.length) {
-        question.questionNotes.forEach((questionNote, index) => {
-          if (questionNote !== question.answerNotes[index]) {
-            correct = false;
-          }
-        });
-      } else {
-        correct = false;
-      }
-
       questions += 1;
-      if (correct) {
+
+      if (this.isCorrect(question.questionNotes, question.answerNotes)) {
         correctAnswers += 1;
       }
     });

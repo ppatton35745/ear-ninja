@@ -1,6 +1,5 @@
 import React from "react";
 import SoundfontProvider from "./SoundfontProvider";
-import Round from "./Round";
 import Home from "./Home";
 import Stats from "./Stats";
 import DimensionsProvider from "./misc/DimensionsProvider";
