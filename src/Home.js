@@ -195,13 +195,28 @@ export default class Home extends React.Component {
       return;
     }
 
-    this.setState({});
+    // this.setState({ submitAnswerDisabled: true });
 
-    this.state.completedQuestions.push({
+    // this.state.completedQuestions.push({
+    //   key: this.state.currentKey,
+    //   questionNumber: this.state.currentQuestionNumber,
+    //   questionNotes: this.state.currentQuestionNotes,
+    //   answerNotes: this.state.currentAnswerNotes
+    // });
+
+    const newArr = this.state.completedQuestions.slice();
+    newArr.push({
       key: this.state.currentKey,
       questionNumber: this.state.currentQuestionNumber,
-      questionNotes: this.state.currentQuestionNotes,
-      answerNotes: this.state.currentAnswerNotes
+      questionNotes: this.state.currentQuestionNotes.slice(),
+      answerNotes: this.state.currentAnswerNotes.slice()
+    });
+
+    // console.log(newArr);
+
+    this.setState({
+      submitAnswerDisabled: true,
+      completedQuestions: newArr
     });
 
     if (
@@ -210,7 +225,6 @@ export default class Home extends React.Component {
         this.state.currentAnswerNotes
       )
     ) {
-      console.log("not correct playing first interval");
       hinter.playInterval(
         this.state.currentQuestionNotes,
         this.props.onPlayNote,
@@ -221,7 +235,6 @@ export default class Home extends React.Component {
       );
 
       setTimeout(() => {
-        console.log("second interval");
         hinter.playInterval(
           this.state.currentAnswerNotes,
           this.props.onPlayNote,
@@ -233,7 +246,6 @@ export default class Home extends React.Component {
       }, 700);
 
       setTimeout(() => {
-        console.log("third interval");
         hinter.playInterval(
           this.state.currentQuestionNotes,
           this.props.onPlayNote,
@@ -249,7 +261,8 @@ export default class Home extends React.Component {
           currentQuestionNumber: this.state.currentQuestionNumber + 1,
           currentQuestionNotes: [],
           currentAnswerNotes: [],
-          initialPlay: false
+          initialPlay: false,
+          submitAnswerDisabled: false
         });
       }, 2100);
     } else {
@@ -257,7 +270,8 @@ export default class Home extends React.Component {
         currentQuestionNumber: this.state.currentQuestionNumber + 1,
         currentQuestionNotes: [],
         currentAnswerNotes: [],
-        initialPlay: false
+        initialPlay: false,
+        submitAnswerDisabled: false
       });
     }
   };
@@ -335,7 +349,31 @@ export default class Home extends React.Component {
         }
       }
     }
+
+    // console.log(
+    //   "old completed questions",
+    //   prevState.completedQuestions,
+    //   "new completed questions",
+    //   this.state.completedQuestions
+    // );
+
+    // if (
+    //   this.state.completedQuestions.length !==
+    //   prevState.completedQuestions.length
+    // ) {
+    //   console.log("completedAnswersChanged");
+    //   console.log(this.refs.infoScrollBottom);
+    //   this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
+    // }
   }
+
+  scrollInfoToBottom = () => {
+    console.log("scrolling to bottom");
+    setTimeout(() => {
+      this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
+    });
+    // this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
+  };
 
   render() {
     let submitControlButtons = null;
@@ -395,6 +433,7 @@ export default class Home extends React.Component {
           />
         </div>
 
+        {/* messengerBodyDiv.scrollTop(messengerBodyDiv.prop("scrollHeight")); */}
         <div
           className="info"
           style={{
@@ -407,6 +446,14 @@ export default class Home extends React.Component {
           <Info
             completedQuestions={this.state.completedQuestions}
             inRound={this.state.inRound}
+            scrollInfoToBottom={this.scrollInfoToBottom}
+          />
+          <div
+            ref="infoScrollBottom"
+            style={{
+              width: 100 + "%",
+              height: 1 + "px"
+            }}
           />
         </div>
 
@@ -442,6 +489,7 @@ export default class Home extends React.Component {
               hintNotes={this.state.hintNotes}
               timeRemaining={this.state.timeRemaining}
               inRound={this.state.inRound}
+              submitAnswerDisabled={this.state.submitAnswerDisabled}
             />
           </div>
         </div>

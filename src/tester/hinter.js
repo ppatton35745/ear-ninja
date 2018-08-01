@@ -9,7 +9,6 @@ export default class hinter {
   ) => {
     notes.forEach(note => {
       if (hinted) {
-        console.log("playing hinted");
         setTimeout(() => {
           play(note);
         }, 0);

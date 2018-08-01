@@ -68,7 +68,11 @@ class Key extends React.Component {
   }
 
   toggleCurrentAnswers() {
-    if (this.props.inRound !== true || this.props.timeRemaining <= 0) {
+    if (
+      this.props.inRound !== true ||
+      this.props.timeRemaining <= 0 ||
+      this.props.submitAnswerDisabled
+    ) {
       return;
     }
     const answerIndex = this.props.currentAnswerNotes.indexOf(

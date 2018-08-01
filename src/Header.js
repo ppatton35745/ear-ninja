@@ -16,7 +16,7 @@ export default class Header extends React.Component {
       return (
         <React.Fragment>
           <h2>
-            <span>{`Time Remaining: ${this.props.timeRemaining}`}</span>
+            <span>{`Time: ${this.props.timeRemaining}`}</span>
             <span>{`Key: ${this.props.currentKey}`}</span>
             <span>{`Score: ${this.props.currentScore.correct}/${
               this.props.currentScore.possible
