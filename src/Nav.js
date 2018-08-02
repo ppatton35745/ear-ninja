@@ -18,25 +18,33 @@ export default class Nav extends React.Component {
     if (!this.props.inRound && !this.props.viewingStats) {
       buttons = [
         { key: 1, name: "Play Round", func: this.props.startRound },
-        { key: 2, name: "View Stats", func: this.props.startRound }
+        { key: 2, name: "Logout", func: this.props.logUserOut }
         // { name: "Logout", func: this.props.logout }
       ];
     } else if (this.props.inRound) {
       buttons = [
-        { key: 1, name: "Play Scale", func: this.props.playScale },
-        { key: 2, name: "Play Interval", func: this.props.playInterval },
+        // { key: 1, name: "Play Scale", func: this.props.playScale },
+        // { key: 2, name: "Play Interval", func: this.props.playInterval },
+        // {
+        //   key: 3,
+        //   name: "Play Teased Interval",
+        //   func: this.props.playTeasedInterval
+        // }
         {
-          key: 3,
-          name: "Play Teased Interval",
-          func: this.props.playTeasedInterval
+          key: 1,
+          name: "End Round",
+          func: () => {
+            this.props.endRound(false);
+          }
         }
       ];
-    } else if (this.props.viewingStats) {
-      buttons = [
-        { key: 1, name: "Play Round", func: this.props.startRound },
-        { key: 2, name: "Home", func: this.props.startRound }
-        // { name: "Logout", func: this.props.logout }
-      ];
+      // } else if (this.props.viewingStats) {
+      //   buttons = [
+      //     { key: 1, name: "Play Round", func: this.props.startRound },
+      //     { key: 2, name: "Home", func: this.props.startRound }
+      //     // { name: "Logout", func: this.props.logout }
+      //   ];
+      // }
     }
 
     return (

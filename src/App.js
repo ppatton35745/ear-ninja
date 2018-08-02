@@ -29,6 +29,11 @@ export default class App extends React.Component {
     this.setState({ loggedIn: true });
   };
 
+  logUserOut = () => {
+    sessionStorage.removeItem("activeUser");
+    this.setState({ loggedIn: false });
+  };
+
   toggleViewingStats = () => {
     if (this.state.viewingStats) {
       this.setState({
@@ -62,6 +67,7 @@ export default class App extends React.Component {
                   toggleViewingStats={this.toggleViewingStats}
                   containerWidth={containerWidth}
                   containerHeight={containerHeight}
+                  logUserOut={this.logUserOut}
                 />
               )}
             </DimensionsProvider>

@@ -294,8 +294,8 @@ export default class Home extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
-  endRound = () => {
-    const reset = () =>
+  endRound = isRoundComplete => {
+    const resetComplete = () =>
       this.setState({
         timeRemaining: 60,
         currentKey: "",
@@ -307,20 +307,37 @@ export default class Home extends React.Component {
         timerRunning: false
       });
 
-    if (
-      !sessionStorage.getItem("activeUser") ||
-      this.state.completedQuestions.length === 0
-    ) {
-      reset();
+    const resetEarly = () =>
+      this.setState({
+        timeRemaining: 60,
+        currentKey: "",
+        currentQuestionNumber: 0,
+        currentQuestionNotes: [],
+        currentAnswerNotes: [],
+        hintNotes: [],
+        inRound: false,
+        timerRunning: false,
+        completedQuestions: []
+      });
+
+    if (isRoundComplete) {
+      if (
+        !sessionStorage.getItem("activeUser") ||
+        this.state.completedQuestions.length === 0
+      ) {
+        resetComplete();
+      } else {
+        const roundTimeStamp = new Date();
+        const roundData = {
+          userId: sessionStorage.getItem("activeUser"),
+          timeStamp: roundTimeStamp,
+          musicKey: this.state.currentKey,
+          questions: this.state.completedQuestions
+        };
+        Api.postRound(roundData).then(resetComplete());
+      }
     } else {
-      const roundTimeStamp = new Date();
-      const roundData = {
-        userId: sessionStorage.getItem("activeUser"),
-        timeStamp: roundTimeStamp,
-        musicKey: this.state.currentKey,
-        questions: this.state.completedQuestions
-      };
-      Api.postRound(roundData).then(reset());
+      resetEarly();
     }
   };
 
@@ -346,7 +363,8 @@ export default class Home extends React.Component {
         }, 4000);
       } else if (this.state.timerRunning) {
         if (this.state.timeRemaining <= 0) {
-          this.endRound();
+          const isRoundComplete = true;
+          this.endRound(isRoundComplete);
         } else if (
           this.state.currentQuestionNumber !== prevState.currentQuestionNumber
         ) {
@@ -384,12 +402,31 @@ export default class Home extends React.Component {
     let submitControlButtons = null;
     if (this.state.inRound) {
       submitControlButtons = (
+        // { key: 1, name: "Play Scale", func: this.props.playScale },
+        // { key: 2, name: "Play Interval", func: this.props.playInterval },
+        // {
+        //   key: 3,
+        //   name: "Play Teased Interval",
+        //   func: this.props.playTeasedInterval
+        // }
         <React.Fragment>
           <button
             onClick={this.clearCurrentAnswerNotes}
             className="btn btn-outline-light"
           >
             Clear
+          </button>
+          <button onClick={this.playScale} className="btn btn-outline-light">
+            Play Scale
+          </button>
+          <button onClick={this.playInterval} className="btn btn-outline-light">
+            Play Interval
+          </button>
+          <button
+            onClick={this.playTeasedInterval}
+            className="btn btn-outline-light"
+          >
+            Play Teased Interval
           </button>
           <button onClick={this.submitAnswer} className="btn btn-outline-light">
             Submit
@@ -413,9 +450,11 @@ export default class Home extends React.Component {
             toggleViewingStats={this.props.toggleViewingStats}
             inRound={this.state.inRound}
             viewingStats={this.props.viewingStats}
-            playScale={this.playScale}
-            playInterval={this.playInterval}
-            playTeasedInterval={this.playTeasedInterval}
+            // playScale={this.playScale}
+            // playInterval={this.playInterval}
+            // playTeasedInterval={this.playTeasedInterval}
+            logUserOut={this.props.logUserOut}
+            endRound={this.endRound}
           />
         </div>
 
