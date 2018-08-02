@@ -398,15 +398,41 @@ export default class Home extends React.Component {
   };
 
   render() {
+    const responsivePianoHeight = this.props.containerWidth * 0.27;
+    const heightRemaining = this.props.containerHeight - responsivePianoHeight;
+
     let submitControlButtons = null;
+    let heightProportions = null;
+
     if (this.state.inRound) {
+      heightProportions = {
+        nav: 0.15,
+        header: 0.1,
+        info: 0.6,
+        submitControl: 0.15
+      };
+
       submitControlButtons = (
-        <TestController
-          clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
-          play={this.play}
-          submitAnswer={this.submitAnswer}
-        />
+        <div
+          className="submitControl"
+          style={{
+            // width: this.props.containerWidth,
+            height: heightRemaining * heightProportions.submitControl
+          }}
+        >
+          <TestController
+            clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+            play={this.play}
+            submitAnswer={this.submitAnswer}
+          />
+        </div>
       );
+    } else {
+      heightProportions = {
+        nav: 0.15,
+        header: 0.1,
+        info: 0.75
+      };
     }
     return (
       <div
@@ -419,9 +445,7 @@ export default class Home extends React.Component {
         <div
           className="nav"
           style={{
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.15
+            height: heightRemaining * heightProportions.nav
           }}
         >
           <Nav
@@ -435,9 +459,7 @@ export default class Home extends React.Component {
         <div
           className="header"
           style={{
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.1
+            height: heightRemaining * heightProportions.header
           }}
         >
           <Header
@@ -452,9 +474,7 @@ export default class Home extends React.Component {
         <div
           className="info"
           style={{
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.6
+            height: heightRemaining * heightProportions.info
           }}
         >
           <Info
@@ -465,29 +485,18 @@ export default class Home extends React.Component {
           <div
             ref="infoScrollBottom"
             style={{
-              width: 100 + "%",
-              height: 1 + "px"
+              width: 100 + "%"
+              // height: 1 + "px"
             }}
           />
         </div>
 
-        <div
-          className="submitControl"
-          style={{
-            // width: this.props.containerWidth,
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.15
-          }}
-        >
-          {submitControlButtons}
-        </div>
+        {submitControlButtons}
 
         <div
           className="responsivePianoContainer"
           style={{
-            // width: this.props.containerWidth,
-            height: this.props.containerWidth * 0.27
+            height: responsivePianoHeight
           }}
         >
           <div
