@@ -117,6 +117,23 @@ class Piano extends React.Component {
     return shortcut && shortcut.key;
   };
 
+  toggleCurrentAnswers = midiNumber => {
+    if (
+      this.props.inRound !== true ||
+      this.props.timeRemaining <= 0 ||
+      this.props.submitAnswerDisabled
+    ) {
+      return;
+    }
+    const answerIndex = this.props.currentAnswerNotes.indexOf(
+      this.props.midiNumber
+    );
+    if (answerIndex === -1) {
+      this.props.currentAnswerNotes.push(midiNumber);
+      this.props.currentAnswerNotes.sort();
+    }
+  };
+
   onKeyDown = event => {
     // Don't conflict with existing combinations like ctrl + t
     if (event.ctrlKey || event.metaKey || event.shiftKey) {
@@ -125,6 +142,7 @@ class Piano extends React.Component {
     const midiNumber = this.getMidiNumberForKey(event.key);
     if (midiNumber) {
       this.onPlayNote(midiNumber);
+      this.toggleCurrentAnswers(midiNumber);
     }
   };
 
@@ -217,9 +235,11 @@ class Piano extends React.Component {
         onStopNote={this.onStopNote}
         currentAnswerNotes={this.props.currentAnswerNotes}
         hintNotes={this.props.hintNotes}
+        shownAnswers={this.props.shownAnswers}
         timeRemaining={this.props.timeRemaining}
         inRound={this.props.inRound}
         submitAnswerDisabled={this.props.submitAnswerDisabled}
+        toggleCurrentAnswers={this.toggleCurrentAnswers}
       />
     );
   }

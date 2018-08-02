@@ -30,6 +30,7 @@ export default class Home extends React.Component {
       currentAnswerNotes: [],
       completedQuestions: [],
       hintNotes: [],
+      shownAnswers: [],
       inRound: false,
       timerRunning: false,
       submitAnswerDisabled: false
@@ -148,6 +149,28 @@ export default class Home extends React.Component {
     }));
   };
 
+  onShowAnswer = midiNumber => {
+    const isShown = this.state.shownAnswers.includes(midiNumber);
+    if (isShown) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      shownAnswers: prevState.shownAnswers.concat(midiNumber).sort()
+    }));
+  };
+
+  offShowAnswer = midiNumber => {
+    const isNotShown = !this.state.shownAnswers.includes(midiNumber);
+    if (isNotShown) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      shownAnswers: prevState.shownAnswers.filter(note => midiNumber !== note)
+    }));
+  };
+
   playInterval = () => {
     if (this.props.disabled || this.props.timeRemaining <= 0) {
       return;
@@ -219,8 +242,8 @@ export default class Home extends React.Component {
         this.props.onPlayNote,
         true,
         this.props.onStopNote,
-        this.onHintNote,
-        this.offHintNote
+        this.onShowAnswer,
+        this.offShowAnswer
       );
 
       setTimeout(() => {
@@ -240,8 +263,8 @@ export default class Home extends React.Component {
           this.props.onPlayNote,
           true,
           this.props.onStopNote,
-          this.onHintNote,
-          this.offHintNote
+          this.onShowAnswer,
+          this.offShowAnswer
         );
       }, 1400);
 
@@ -531,6 +554,7 @@ export default class Home extends React.Component {
               disabled={this.props.disabled}
               currentAnswerNotes={this.state.currentAnswerNotes}
               hintNotes={this.state.hintNotes}
+              shownAnswers={this.state.shownAnswers}
               timeRemaining={this.state.timeRemaining}
               inRound={this.state.inRound}
               submitAnswerDisabled={this.state.submitAnswerDisabled}

@@ -26,6 +26,7 @@ export default class ResponsivePiano extends React.Component {
         keyboardShortcuts={keyboardShortcuts}
         currentAnswerNotes={this.props.currentAnswerNotes}
         hintNotes={this.props.hintNotes}
+        shownAnswers={this.props.shownAnswers}
         timeRemaining={this.props.timeRemaining}
         inRound={this.props.inRound}
         submitAnswerDisabled={this.props.submitAnswerDisabled}
