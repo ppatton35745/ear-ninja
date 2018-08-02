@@ -13,9 +13,6 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      inRound: false,
-      roundResults: [],
-      viewingStats: false,
       loggedIn: false
     };
   }
@@ -31,18 +28,6 @@ export default class App extends React.Component {
   logUserOut = () => {
     sessionStorage.removeItem("activeUser");
     this.setState({ loggedIn: false });
-  };
-
-  toggleViewingStats = () => {
-    if (this.state.viewingStats) {
-      this.setState({
-        viewingStats: false
-      });
-    } else {
-      this.setState({
-        viewingStats: true
-      });
-    }
   };
 
   componentDidMount() {}
@@ -63,7 +48,6 @@ export default class App extends React.Component {
                   onPlayNote={playNote}
                   onStopNote={stopNote}
                   disabled={isLoading}
-                  toggleViewingStats={this.toggleViewingStats}
                   containerWidth={containerWidth}
                   containerHeight={containerHeight}
                   logUserOut={this.logUserOut}

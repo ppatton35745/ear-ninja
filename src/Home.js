@@ -14,10 +14,9 @@ export default class Home extends React.Component {
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
-    toggleInRound: PropTypes.func.isRequired,
-    toggleViewingStats: PropTypes.func.isRequired,
-    roundResults: PropTypes.array.isRequired,
-    viewingStats: PropTypes.bool.isRequired
+    containerWidth: PropTypes.number.isRequired,
+    containerHeight: PropTypes.number.isRequired,
+    logUserOut: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -410,7 +409,13 @@ export default class Home extends React.Component {
       );
     }
     return (
-      <div className="homeContainer">
+      <div
+        className="homeContainer"
+        style={{
+          width: this.props.containerWidth,
+          height: this.props.containerHeight
+        }}
+      >
         <div
           className="nav"
           style={{
