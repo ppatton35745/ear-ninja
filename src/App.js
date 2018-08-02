@@ -3,6 +3,7 @@ import SoundfontProvider from "./SoundfontProvider";
 import Home from "./Home";
 import Stats from "./Stats";
 import DimensionsProvider from "./misc/DimensionsProvider";
+import Login from "./Login";
 
 // webkitAudioContext fallback needed to support Safari
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -15,9 +16,18 @@ export default class App extends React.Component {
     this.state = {
       inRound: false,
       roundResults: [],
-      viewingStats: false
+      viewingStats: false,
+      loggedIn: false
     };
   }
+
+  isAuthenticated = () => {
+    return sessionStorage.getItem("activeUser");
+  };
+
+  logUserIn = () => {
+    this.setState({ loggedIn: true });
+  };
 
   toggleViewingStats = () => {
     if (this.state.viewingStats) {
@@ -36,58 +46,30 @@ export default class App extends React.Component {
   componentDidUpdate() {}
 
   render() {
-    return (
-      <SoundfontProvider
-        instrumentName="acoustic_grand_piano"
-        audioContext={audioContext}
-        hostname={soundfontHostname}
-        render={({ isLoading, playNote, stopNote }) => (
-          <DimensionsProvider className="dimensionProvider">
-            {({ containerWidth, containerHeight }) => (
-              <Home
-                onPlayNote={playNote}
-                onStopNote={stopNote}
-                disabled={isLoading}
-                toggleViewingStats={this.toggleViewingStats}
-                containerWidth={containerWidth}
-                containerHeight={containerHeight}
-              />
-            )}
-          </DimensionsProvider>
-        )}
-      />
-    );
-
-    // else if (this.state.viewingStats) {
-    //   return (
-    //     <Stats
-    //       toggleViewingStats={this.toggleViewingStats}
-    //       inRound={this.state.inRound}
-    //       viewingStats={this.state.viewingStats}
-    //       toggleInRound={this.toggleInRound}
-    //     />
-    //   );
-    // } else {
-    //   return (
-    //     <SoundfontProvider
-    //       instrumentName="acoustic_grand_piano"
-    //       audioContext={audioContext}
-    //       hostname={soundfontHostname}
-    //       render={({ isLoading, playNote, stopNote }) => (
-    //         <Home
-    //           onPlayNote={playNote}
-    //           onStopNote={stopNote}
-    //           disabled={isLoading}
-    //           toggleInRound={this.toggleInRound}
-    //           toggleViewingStats={this.toggleViewingStats}
-    //           roundResults={this.state.roundResults}
-    //           inRound={this.state.inRound}
-    //           viewingStats={this.state.viewingStats}
-    //           getScore={this.getScore}
-    //         />
-    //       )}
-    //     />
-    //   );
-    // }
+    if (this.state.loggedIn || this.isAuthenticated()) {
+      return (
+        <SoundfontProvider
+          instrumentName="acoustic_grand_piano"
+          audioContext={audioContext}
+          hostname={soundfontHostname}
+          render={({ isLoading, playNote, stopNote }) => (
+            <DimensionsProvider className="dimensionProvider">
+              {({ containerWidth, containerHeight }) => (
+                <Home
+                  onPlayNote={playNote}
+                  onStopNote={stopNote}
+                  disabled={isLoading}
+                  toggleViewingStats={this.toggleViewingStats}
+                  containerWidth={containerWidth}
+                  containerHeight={containerHeight}
+                />
+              )}
+            </DimensionsProvider>
+          )}
+        />
+      );
+    } else {
+      return <Login key={Date.now()} logUserIn={this.logUserIn} />;
+    }
   }
 }

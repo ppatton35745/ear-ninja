@@ -6,6 +6,7 @@ import Header from "./Header";
 import Info from "./Info";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
+import Api from "./api/apiManager";
 
 export default class Home extends React.Component {
   static propTypes = {
@@ -195,24 +196,12 @@ export default class Home extends React.Component {
       return;
     }
 
-    // this.setState({ submitAnswerDisabled: true });
-
-    // this.state.completedQuestions.push({
-    //   key: this.state.currentKey,
-    //   questionNumber: this.state.currentQuestionNumber,
-    //   questionNotes: this.state.currentQuestionNotes,
-    //   answerNotes: this.state.currentAnswerNotes
-    // });
-
     const newArr = this.state.completedQuestions.slice();
     newArr.push({
-      key: this.state.currentKey,
       questionNumber: this.state.currentQuestionNumber,
       questionNotes: this.state.currentQuestionNotes.slice(),
       answerNotes: this.state.currentAnswerNotes.slice()
     });
-
-    // console.log(newArr);
 
     this.setState({
       submitAnswerDisabled: true,
@@ -267,7 +256,7 @@ export default class Home extends React.Component {
       }, 2100);
     } else {
       this.setState({
-        currentQuestionNumber: this.state.currentQuestionNumber + 1,
+        // currentQuestionNumber: this.state.currentQuestionNumber + 1,
         currentQuestionNotes: [],
         currentAnswerNotes: [],
         initialPlay: false,
@@ -306,17 +295,33 @@ export default class Home extends React.Component {
   };
 
   endRound = () => {
-    // make api calls to save round info .then() =>
-    this.setState({
-      timeRemaining: 60,
-      currentKey: "",
-      currentQuestionNumber: 0,
-      currentQuestionNotes: [],
-      currentAnswerNotes: [],
-      hintNotes: [],
-      inRound: false,
-      timerRunning: false
-    });
+    const reset = () =>
+      this.setState({
+        timeRemaining: 60,
+        currentKey: "",
+        currentQuestionNumber: 0,
+        currentQuestionNotes: [],
+        currentAnswerNotes: [],
+        hintNotes: [],
+        inRound: false,
+        timerRunning: false
+      });
+
+    if (
+      !sessionStorage.getItem("activeUser") ||
+      this.state.completedQuestions.length === 0
+    ) {
+      reset();
+    } else {
+      const roundTimeStamp = new Date();
+      const roundData = {
+        userId: sessionStorage.getItem("activeUser"),
+        timeStamp: roundTimeStamp,
+        musicKey: this.state.currentKey,
+        questions: this.state.completedQuestions
+      };
+      Api.postRound(roundData).then(reset());
+    }
   };
 
   componentDidMount() {}
