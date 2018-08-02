@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ResponsivePiano from "./ResponsivePiano";
-import Nav from "./Nav";
-import Header from "./Header";
-import Info from "./Info";
+import ResponsivePiano from "./responsivePiano/ResponsivePiano";
+import TestController from "./tester/TestController";
+import Nav from "./nav/Nav";
+import Header from "./header/Header";
+import Info from "./info/Info";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
@@ -127,82 +128,77 @@ export default class Home extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
-  onHintNote = midiNumber => {
-    const isHint = this.state.hintNotes.includes(midiNumber);
-    if (isHint) {
+  changeNoteStatus = (collection, note, action) => {
+    const inCollection = this.state[collection].includes(note);
+    if (
+      (inCollection && action === "on") ||
+      (!inCollection && action === "off")
+    ) {
       return;
-    }
+    } else {
+      switch (action) {
+        case "on": {
+          this.setState(prevState => ({
+            [collection]: prevState[collection].concat(note).sort()
+          }));
+          break;
+        }
 
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.concat(midiNumber).sort()
-    }));
+        case "off": {
+          this.setState(prevState => ({
+            [collection]: prevState[collection].filter(
+              keepNote => keepNote !== note
+            )
+          }));
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
   };
 
-  offHintNote = midiNumber => {
-    const isNotHint = !this.state.hintNotes.includes(midiNumber);
-    if (isNotHint) {
-      return;
-    }
-
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.filter(note => midiNumber !== note)
-    }));
-  };
-
-  onShowAnswer = midiNumber => {
-    const isShown = this.state.shownAnswers.includes(midiNumber);
-    if (isShown) {
-      return;
-    }
-
-    this.setState(prevState => ({
-      shownAnswers: prevState.shownAnswers.concat(midiNumber).sort()
-    }));
-  };
-
-  offShowAnswer = midiNumber => {
-    const isNotShown = !this.state.shownAnswers.includes(midiNumber);
-    if (isNotShown) {
-      return;
-    }
-
-    this.setState(prevState => ({
-      shownAnswers: prevState.shownAnswers.filter(note => midiNumber !== note)
-    }));
-  };
-
-  playInterval = () => {
+  play = what => {
     if (this.props.disabled || this.props.timeRemaining <= 0) {
       return;
     }
-    hinter.playInterval(this.state.currentQuestionNotes, this.props.onPlayNote);
-  };
+    switch (what) {
+      case "interval": {
+        hinter.playInterval(
+          this.state.currentQuestionNotes,
+          this.props.onPlayNote
+        );
+        break;
+      }
 
-  playTeasedInterval = () => {
-    if (this.props.disabled || this.props.timeRemaining <= 0) {
-      return;
+      case "teasedInterval": {
+        hinter.playTeasedInterval(
+          this.state.currentQuestionNotes,
+          this.props.onPlayNote
+        );
+        break;
+      }
+
+      case "scale": {
+        const note = this.seedNotes[
+          this.musicKeys.indexOf(this.state.currentKey)
+        ];
+        hinter.playScale(
+          note,
+          this.props.onPlayNote,
+          this.props.onStopNote,
+          this.upPattern,
+          this.downPattern,
+          "hintNotes",
+          this.changeNoteStatus
+        );
+        break;
+      }
+
+      default:
+        break;
     }
-
-    hinter.playTeasedInterval(
-      this.state.currentQuestionNotes,
-      this.props.onPlayNote
-    );
-  };
-
-  playScale = () => {
-    if (this.props.disabled || this.props.timeRemaining <= 0) {
-      return;
-    }
-    const note = this.seedNotes[this.musicKeys.indexOf(this.state.currentKey)];
-    hinter.playScale(
-      note,
-      this.props.onPlayNote,
-      this.props.onStopNote,
-      this.upPattern,
-      this.downPattern,
-      this.onHintNote,
-      this.offHintNote
-    );
   };
 
   clearCurrentAnswerNotes = () => {
@@ -242,8 +238,8 @@ export default class Home extends React.Component {
         this.props.onPlayNote,
         true,
         this.props.onStopNote,
-        this.onShowAnswer,
-        this.offShowAnswer
+        "shownAnswers",
+        this.changeNoteStatus
       );
 
       setTimeout(() => {
@@ -252,8 +248,8 @@ export default class Home extends React.Component {
           this.props.onPlayNote,
           true,
           this.props.onStopNote,
-          this.onHintNote,
-          this.offHintNote
+          "hintNotes",
+          this.changeNoteStatus
         );
       }, 700);
 
@@ -263,8 +259,8 @@ export default class Home extends React.Component {
           this.props.onPlayNote,
           true,
           this.props.onStopNote,
-          this.onShowAnswer,
-          this.offShowAnswer
+          "shownAnswers",
+          this.changeNoteStatus
         );
       }, 1400);
 
@@ -279,7 +275,6 @@ export default class Home extends React.Component {
       }, 2100);
     } else {
       this.setState({
-        // currentQuestionNumber: this.state.currentQuestionNumber + 1,
         currentQuestionNotes: [],
         currentAnswerNotes: [],
         initialPlay: false,
@@ -318,7 +313,7 @@ export default class Home extends React.Component {
   };
 
   endRound = isRoundComplete => {
-    const resetComplete = () =>
+    const complete = () =>
       this.setState({
         timeRemaining: 60,
         currentKey: "",
@@ -330,7 +325,7 @@ export default class Home extends React.Component {
         timerRunning: false
       });
 
-    const resetEarly = () =>
+    const early = () =>
       this.setState({
         timeRemaining: 60,
         currentKey: "",
@@ -348,7 +343,7 @@ export default class Home extends React.Component {
         !sessionStorage.getItem("activeUser") ||
         this.state.completedQuestions.length === 0
       ) {
-        resetComplete();
+        complete();
       } else {
         const roundTimeStamp = new Date();
         const roundData = {
@@ -357,10 +352,10 @@ export default class Home extends React.Component {
           musicKey: this.state.currentKey,
           questions: this.state.completedQuestions
         };
-        Api.postRound(roundData).then(resetComplete());
+        Api.postRound(roundData).then(complete());
       }
     } else {
-      resetEarly();
+      early();
     }
   };
 
@@ -379,9 +374,9 @@ export default class Home extends React.Component {
         this.state.currentQuestionNumber !== prevState.currentQuestionNumber &&
         this.state.currentQuestionNumber === 1
       ) {
-        this.playScale();
+        this.play("scale");
         setTimeout(() => {
-          this.playInterval();
+          this.play("interval");
           this.startTimer();
         }, 4000);
       } else if (this.state.timerRunning) {
@@ -391,70 +386,27 @@ export default class Home extends React.Component {
         } else if (
           this.state.currentQuestionNumber !== prevState.currentQuestionNumber
         ) {
-          setTimeout(() => this.playInterval(), 100);
+          setTimeout(() => this.play("interval"), 100);
         }
       }
     }
-
-    // console.log(
-    //   "old completed questions",
-    //   prevState.completedQuestions,
-    //   "new completed questions",
-    //   this.state.completedQuestions
-    // );
-
-    // if (
-    //   this.state.completedQuestions.length !==
-    //   prevState.completedQuestions.length
-    // ) {
-    //   console.log("completedAnswersChanged");
-    //   console.log(this.refs.infoScrollBottom);
-    //   this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
-    // }
   }
 
   scrollInfoToBottom = () => {
-    console.log("scrolling to bottom");
     setTimeout(() => {
       this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
     });
-    // this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
   };
 
   render() {
     let submitControlButtons = null;
     if (this.state.inRound) {
       submitControlButtons = (
-        // { key: 1, name: "Play Scale", func: this.props.playScale },
-        // { key: 2, name: "Play Interval", func: this.props.playInterval },
-        // {
-        //   key: 3,
-        //   name: "Play Teased Interval",
-        //   func: this.props.playTeasedInterval
-        // }
-        <React.Fragment>
-          <button
-            onClick={this.clearCurrentAnswerNotes}
-            className="btn btn-outline-light"
-          >
-            Clear
-          </button>
-          <button onClick={this.playScale} className="btn btn-outline-light">
-            Play Scale
-          </button>
-          <button onClick={this.playInterval} className="btn btn-outline-light">
-            Play Interval
-          </button>
-          <button
-            onClick={this.playTeasedInterval}
-            className="btn btn-outline-light"
-          >
-            Play Teased Interval
-          </button>
-          <button onClick={this.submitAnswer} className="btn btn-outline-light">
-            Submit
-          </button>
-        </React.Fragment>
+        <TestController
+          clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+          play={this.play}
+          submitAnswer={this.submitAnswer}
+        />
       );
     }
     return (
@@ -462,7 +414,6 @@ export default class Home extends React.Component {
         <div
           className="nav"
           style={{
-            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.15
@@ -470,12 +421,7 @@ export default class Home extends React.Component {
         >
           <Nav
             startRound={this.startRound}
-            toggleViewingStats={this.props.toggleViewingStats}
             inRound={this.state.inRound}
-            viewingStats={this.props.viewingStats}
-            // playScale={this.playScale}
-            // playInterval={this.playInterval}
-            // playTeasedInterval={this.playTeasedInterval}
             logUserOut={this.props.logUserOut}
             endRound={this.endRound}
           />
@@ -484,7 +430,6 @@ export default class Home extends React.Component {
         <div
           className="header"
           style={{
-            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.1
@@ -492,7 +437,6 @@ export default class Home extends React.Component {
         >
           <Header
             inRound={this.state.inRound}
-            viewingStats={this.props.viewingStats}
             completedQuestions={this.state.completedQuestions}
             currentScore={this.getScore(this.state.completedQuestions)}
             timeRemaining={this.state.timeRemaining}
@@ -500,11 +444,9 @@ export default class Home extends React.Component {
           />
         </div>
 
-        {/* messengerBodyDiv.scrollTop(messengerBodyDiv.prop("scrollHeight")); */}
         <div
           className="info"
           style={{
-            // width: this.props.containerWidth,
             height:
               (this.props.containerHeight - this.props.containerWidth * 0.27) *
               0.6

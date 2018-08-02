@@ -27,7 +27,7 @@ export default class Login extends Component {
           user[0].email !== this.state.email)
       ) {
         alert(
-          "I'm sorry, that email or password is incorrect or non-existent. Please try again."
+          "Email or password is incorrect or non-existent. Please try again."
         );
         return;
       } else if (

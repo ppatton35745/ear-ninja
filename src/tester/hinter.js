@@ -2,25 +2,27 @@ export default class hinter {
   static playInterval = (
     notes,
     play,
-    hinted,
+    painted,
     stop,
-    onHintNote,
-    offHintNote
+    collection,
+    changeNoteStatus
   ) => {
     notes.forEach(note => {
-      if (hinted) {
+      if (painted) {
         setTimeout(() => {
           play(note);
         }, 0);
         setTimeout(() => {
-          onHintNote(note);
+          // onHintNote(note);
+          changeNoteStatus(collection, note, "on");
         }, 10);
 
         setTimeout(() => {
           stop(note);
         }, 600);
         setTimeout(() => {
-          offHintNote(note);
+          // offHintNote(note);
+          changeNoteStatus(collection, note, "off");
         }, 10 + 600);
       } else {
         play(note);
@@ -47,22 +49,24 @@ export default class hinter {
     stop,
     upPattern,
     downPattern,
-    onHintNote,
-    offHintNote
+    collection,
+    changeNoteStatus
   ) => {
     const playDelayed = (note, j) => {
       setTimeout(() => {
         play(note);
       }, j * 200);
       setTimeout(() => {
-        onHintNote(note);
+        // onHintNote(note);
+        changeNoteStatus(collection, note, "on");
       }, j * 210);
 
       setTimeout(() => {
         stop(note);
       }, j * 200 + 199);
       setTimeout(() => {
-        offHintNote(note);
+        // offHintNote(note);
+        changeNoteStatus(collection, note, "off");
       }, j * 210 + 199);
     };
 

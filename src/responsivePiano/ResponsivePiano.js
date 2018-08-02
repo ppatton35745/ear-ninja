@@ -1,8 +1,8 @@
 import React from "react";
 // import { Piano, KeyboardShortcuts, MidiNumbers } from "react-piano";
-import Piano from "./piano/Piano";
-import KeyboardShortcuts from "./piano/KeyboardShortcuts";
-import MidiNumbers from "./piano/MidiNumbers";
+import Piano from "../piano/Piano";
+import KeyboardShortcuts from "../piano/KeyboardShortcuts";
+import MidiNumbers from "../piano/MidiNumbers";
 
 const noteRange = {
   first: MidiNumbers.fromNote("c3"),
