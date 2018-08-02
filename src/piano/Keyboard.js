@@ -74,6 +74,9 @@ class Keyboard extends React.Component {
           const isHint = this.props.hintNotes
             ? this.props.hintNotes.includes(midiNumber)
             : null;
+          const isShownAnswer = this.props.shownAnswers
+            ? this.props.shownAnswers.includes(midiNumber)
+            : null;
           return (
             <Key
               naturalKeyWidth={naturalKeyWidth}
@@ -82,6 +85,7 @@ class Keyboard extends React.Component {
               active={isActive}
               isAnswer={isAnswer}
               isHint={isHint}
+              isShownAnswer={isShownAnswer}
               accidental={isAccidental}
               disabled={this.props.disabled}
               onPlayNote={this.props.onPlayNote}
@@ -93,6 +97,7 @@ class Keyboard extends React.Component {
               timeRemaining={this.props.timeRemaining}
               inRound={this.props.inRound}
               submitAnswerDisabled={this.props.submitAnswerDisabled}
+              toggleCurrentAnswers={this.props.toggleCurrentAnswers}
             >
               {this.props.disabled
                 ? null

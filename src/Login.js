@@ -27,7 +27,7 @@ export default class Login extends Component {
           user[0].email !== this.state.email)
       ) {
         alert(
-          "I'm sorry, that email or password is incorrect or non-existent. Please try again."
+          "Email or password is incorrect or non-existent. Please try again."
         );
         return;
       } else if (
@@ -72,6 +72,7 @@ export default class Login extends Component {
       <div id="login-stuff">
         <form>
           <img
+            alt=""
             id="headline-image"
             src="https://downloads.intercomcdn.com/i/o/2702/25ce9574b3a1dc309da496fc/Nutshell-logo-white%402x.png"
           />

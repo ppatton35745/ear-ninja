@@ -1,8 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import classNames from "classnames";
-// import difference from "lodash.difference";
-// import find from "lodash.find";
 import MidiNumbers from "../piano/MidiNumbers";
 import DeadKeyboard from "./DeadKeyboard";
 

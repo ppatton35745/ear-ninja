@@ -1,7 +1,6 @@
 import React from "react";
-import SoundfontProvider from "./SoundfontProvider";
+import SoundfontProvider from "./misc/SoundfontProvider";
 import Home from "./Home";
-import Stats from "./Stats";
 import DimensionsProvider from "./misc/DimensionsProvider";
 import Login from "./Login";
 
@@ -14,9 +13,6 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      inRound: false,
-      roundResults: [],
-      viewingStats: false,
       loggedIn: false
     };
   }
@@ -29,16 +25,9 @@ export default class App extends React.Component {
     this.setState({ loggedIn: true });
   };
 
-  toggleViewingStats = () => {
-    if (this.state.viewingStats) {
-      this.setState({
-        viewingStats: false
-      });
-    } else {
-      this.setState({
-        viewingStats: true
-      });
-    }
+  logUserOut = () => {
+    sessionStorage.removeItem("activeUser");
+    this.setState({ loggedIn: false });
   };
 
   componentDidMount() {}
@@ -59,9 +48,9 @@ export default class App extends React.Component {
                   onPlayNote={playNote}
                   onStopNote={stopNote}
                   disabled={isLoading}
-                  toggleViewingStats={this.toggleViewingStats}
                   containerWidth={containerWidth}
                   containerHeight={containerHeight}
+                  logUserOut={this.logUserOut}
                 />
               )}
             </DimensionsProvider>

@@ -67,22 +67,22 @@ class Key extends React.Component {
     );
   }
 
-  toggleCurrentAnswers() {
-    if (
-      this.props.inRound !== true ||
-      this.props.timeRemaining <= 0 ||
-      this.props.submitAnswerDisabled
-    ) {
-      return;
-    }
-    const answerIndex = this.props.currentAnswerNotes.indexOf(
-      this.props.midiNumber
-    );
-    if (answerIndex === -1) {
-      this.props.currentAnswerNotes.push(this.props.midiNumber);
-      this.props.currentAnswerNotes.sort();
-    }
-  }
+  // toggleCurrentAnswers() {
+  //   if (
+  //     this.props.inRound !== true ||
+  //     this.props.timeRemaining <= 0 ||
+  //     this.props.submitAnswerDisabled
+  //   ) {
+  //     return;
+  //   }
+  //   const answerIndex = this.props.currentAnswerNotes.indexOf(
+  //     this.props.midiNumber
+  //   );
+  //   if (answerIndex === -1) {
+  //     this.props.currentAnswerNotes.push(this.props.midiNumber);
+  //     this.props.currentAnswerNotes.sort();
+  //   }
+  // }
 
   render() {
     const {
@@ -95,6 +95,7 @@ class Key extends React.Component {
       active,
       isAnswer,
       isHint,
+      isShownAnswer,
       disabled,
       children
     } = this.props;
@@ -109,7 +110,8 @@ class Key extends React.Component {
           "ReactPiano__Key--disabled": disabled,
           "ReactPiano__Key--active": active,
           "ReactPiano__Key--answer": isAnswer,
-          "ReactPiano__Key--hint": isHint
+          "ReactPiano__Key--hint": isHint,
+          "ReactPiano__Key--shownAnswer": isShownAnswer
         })}
         style={{
           left: ratioToPercentage(
@@ -129,7 +131,7 @@ class Key extends React.Component {
           if (this.props.timeRemaining === 0) {
             return;
           }
-          this.toggleCurrentAnswers();
+          this.props.toggleCurrentAnswers(this.props.midiNumber);
         }}
         onMouseEnter={gliss ? this.playNote : null}
         onMouseLeave={this.stopNote}

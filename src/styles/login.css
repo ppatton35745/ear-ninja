@@ -9,7 +9,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: cornflowerblue;
+  color: black;
 }
 
 .main-headline {
@@ -18,7 +18,7 @@ body {
   text-shadow: 0.5px 0.5px 1px black;
   /* text-shadow: -.5px -1px 2px black; */
   width: 95vw;
-  border-bottom: solid 1px cornflowerblue;
+  border-bottom: solid 1px black;
   text-align: center;
   font-weight: bolder;
 }
@@ -33,7 +33,7 @@ body {
 .login-input {
   width: 20vw;
   border-radius: 8px;
-  border: 2px cornflowerblue solid;
+  border: 2px black solid;
   padding: 5px;
   margin-bottom: 5px;
   outline: none;
@@ -50,7 +50,7 @@ body {
   width: 10vw;
   border-radius: 15px;
   border: none;
-  background-color: cornflowerblue;
+  background-color: black;
   color: white;
   font-size: 1.5rem;
   transition: 0.5s;
@@ -62,7 +62,7 @@ body {
 
 .login-button:hover {
   background-color: cornsilk;
-  color: cornflowerblue;
+  color: black;
 }
 
 .login-button:active {

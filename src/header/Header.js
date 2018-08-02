@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 export default class Header extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
-    viewingStats: PropTypes.bool,
     completedQuestions: PropTypes.array,
     currentKey: PropTypes.string,
     timeRemaining: PropTypes.number,

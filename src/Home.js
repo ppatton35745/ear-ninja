@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ResponsivePiano from "./ResponsivePiano";
-import Nav from "./Nav";
-import Header from "./Header";
-import Info from "./Info";
+import ResponsivePiano from "./responsivePiano/ResponsivePiano";
+import TestController from "./tester/TestController";
+import Nav from "./nav/Nav";
+import Header from "./header/Header";
+import Info from "./info/Info";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
@@ -13,10 +14,9 @@ export default class Home extends React.Component {
     onPlayNote: PropTypes.func.isRequired,
     onStopNote: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
-    toggleInRound: PropTypes.func.isRequired,
-    toggleViewingStats: PropTypes.func.isRequired,
-    roundResults: PropTypes.array.isRequired,
-    viewingStats: PropTypes.bool.isRequired
+    containerWidth: PropTypes.number.isRequired,
+    containerHeight: PropTypes.number.isRequired,
+    logUserOut: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -30,6 +30,7 @@ export default class Home extends React.Component {
       currentAnswerNotes: [],
       completedQuestions: [],
       hintNotes: [],
+      shownAnswers: [],
       inRound: false,
       timerRunning: false,
       submitAnswerDisabled: false
@@ -126,60 +127,77 @@ export default class Home extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
-  onHintNote = midiNumber => {
-    const isHint = this.state.hintNotes.includes(midiNumber);
-    if (isHint) {
+  changeNoteStatus = (collection, note, action) => {
+    const inCollection = this.state[collection].includes(note);
+    if (
+      (inCollection && action === "on") ||
+      (!inCollection && action === "off")
+    ) {
       return;
-    }
+    } else {
+      switch (action) {
+        case "on": {
+          this.setState(prevState => ({
+            [collection]: prevState[collection].concat(note).sort()
+          }));
+          break;
+        }
 
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.concat(midiNumber).sort()
-    }));
+        case "off": {
+          this.setState(prevState => ({
+            [collection]: prevState[collection].filter(
+              keepNote => keepNote !== note
+            )
+          }));
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
   };
 
-  offHintNote = midiNumber => {
-    const isNotHint = !this.state.hintNotes.includes(midiNumber);
-    if (isNotHint) {
-      return;
-    }
-
-    this.setState(prevState => ({
-      hintNotes: prevState.hintNotes.filter(note => midiNumber !== note)
-    }));
-  };
-
-  playInterval = () => {
+  play = what => {
     if (this.props.disabled || this.props.timeRemaining <= 0) {
       return;
     }
-    hinter.playInterval(this.state.currentQuestionNotes, this.props.onPlayNote);
-  };
+    switch (what) {
+      case "interval": {
+        hinter.playInterval(
+          this.state.currentQuestionNotes,
+          this.props.onPlayNote
+        );
+        break;
+      }
 
-  playTeasedInterval = () => {
-    if (this.props.disabled || this.props.timeRemaining <= 0) {
-      return;
+      case "teasedInterval": {
+        hinter.playTeasedInterval(
+          this.state.currentQuestionNotes,
+          this.props.onPlayNote
+        );
+        break;
+      }
+
+      case "scale": {
+        const note = this.seedNotes[
+          this.musicKeys.indexOf(this.state.currentKey)
+        ];
+        hinter.playScale(
+          note,
+          this.props.onPlayNote,
+          this.props.onStopNote,
+          this.upPattern,
+          this.downPattern,
+          "hintNotes",
+          this.changeNoteStatus
+        );
+        break;
+      }
+
+      default:
+        break;
     }
-
-    hinter.playTeasedInterval(
-      this.state.currentQuestionNotes,
-      this.props.onPlayNote
-    );
-  };
-
-  playScale = () => {
-    if (this.props.disabled || this.props.timeRemaining <= 0) {
-      return;
-    }
-    const note = this.seedNotes[this.musicKeys.indexOf(this.state.currentKey)];
-    hinter.playScale(
-      note,
-      this.props.onPlayNote,
-      this.props.onStopNote,
-      this.upPattern,
-      this.downPattern,
-      this.onHintNote,
-      this.offHintNote
-    );
   };
 
   clearCurrentAnswerNotes = () => {
@@ -219,8 +237,8 @@ export default class Home extends React.Component {
         this.props.onPlayNote,
         true,
         this.props.onStopNote,
-        this.onHintNote,
-        this.offHintNote
+        "shownAnswers",
+        this.changeNoteStatus
       );
 
       setTimeout(() => {
@@ -229,8 +247,8 @@ export default class Home extends React.Component {
           this.props.onPlayNote,
           true,
           this.props.onStopNote,
-          this.onHintNote,
-          this.offHintNote
+          "hintNotes",
+          this.changeNoteStatus
         );
       }, 700);
 
@@ -240,8 +258,8 @@ export default class Home extends React.Component {
           this.props.onPlayNote,
           true,
           this.props.onStopNote,
-          this.onHintNote,
-          this.offHintNote
+          "shownAnswers",
+          this.changeNoteStatus
         );
       }, 1400);
 
@@ -256,7 +274,6 @@ export default class Home extends React.Component {
       }, 2100);
     } else {
       this.setState({
-        // currentQuestionNumber: this.state.currentQuestionNumber + 1,
         currentQuestionNotes: [],
         currentAnswerNotes: [],
         initialPlay: false,
@@ -294,8 +311,8 @@ export default class Home extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
-  endRound = () => {
-    const reset = () =>
+  endRound = isRoundComplete => {
+    const complete = () =>
       this.setState({
         timeRemaining: 60,
         currentKey: "",
@@ -307,20 +324,37 @@ export default class Home extends React.Component {
         timerRunning: false
       });
 
-    if (
-      !sessionStorage.getItem("activeUser") ||
-      this.state.completedQuestions.length === 0
-    ) {
-      reset();
+    const early = () =>
+      this.setState({
+        timeRemaining: 60,
+        currentKey: "",
+        currentQuestionNumber: 0,
+        currentQuestionNotes: [],
+        currentAnswerNotes: [],
+        hintNotes: [],
+        inRound: false,
+        timerRunning: false,
+        completedQuestions: []
+      });
+
+    if (isRoundComplete) {
+      if (
+        !sessionStorage.getItem("activeUser") ||
+        this.state.completedQuestions.length === 0
+      ) {
+        complete();
+      } else {
+        const roundTimeStamp = new Date();
+        const roundData = {
+          userId: sessionStorage.getItem("activeUser"),
+          timeStamp: roundTimeStamp,
+          musicKey: this.state.currentKey,
+          questions: this.state.completedQuestions
+        };
+        Api.postRound(roundData).then(complete());
+      }
     } else {
-      const roundTimeStamp = new Date();
-      const roundData = {
-        userId: sessionStorage.getItem("activeUser"),
-        timeStamp: roundTimeStamp,
-        musicKey: this.state.currentKey,
-        questions: this.state.completedQuestions
-      };
-      Api.postRound(roundData).then(reset());
+      early();
     }
   };
 
@@ -339,98 +373,97 @@ export default class Home extends React.Component {
         this.state.currentQuestionNumber !== prevState.currentQuestionNumber &&
         this.state.currentQuestionNumber === 1
       ) {
-        this.playScale();
+        this.play("scale");
         setTimeout(() => {
-          this.playInterval();
+          this.play("interval");
           this.startTimer();
         }, 4000);
       } else if (this.state.timerRunning) {
         if (this.state.timeRemaining <= 0) {
-          this.endRound();
+          const isRoundComplete = true;
+          this.endRound(isRoundComplete);
         } else if (
           this.state.currentQuestionNumber !== prevState.currentQuestionNumber
         ) {
-          setTimeout(() => this.playInterval(), 100);
+          setTimeout(() => this.play("interval"), 100);
         }
       }
     }
-
-    // console.log(
-    //   "old completed questions",
-    //   prevState.completedQuestions,
-    //   "new completed questions",
-    //   this.state.completedQuestions
-    // );
-
-    // if (
-    //   this.state.completedQuestions.length !==
-    //   prevState.completedQuestions.length
-    // ) {
-    //   console.log("completedAnswersChanged");
-    //   console.log(this.refs.infoScrollBottom);
-    //   this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
-    // }
   }
 
   scrollInfoToBottom = () => {
-    console.log("scrolling to bottom");
     setTimeout(() => {
       this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
     });
-    // this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
   };
 
   render() {
+    const responsivePianoHeight = this.props.containerWidth * 0.27;
+    const heightRemaining = this.props.containerHeight - responsivePianoHeight;
+
     let submitControlButtons = null;
+    let heightProportions = null;
+
     if (this.state.inRound) {
+      heightProportions = {
+        nav: 0.15,
+        header: 0.1,
+        info: 0.6,
+        submitControl: 0.15
+      };
+
       submitControlButtons = (
-        <React.Fragment>
-          <button
-            onClick={this.clearCurrentAnswerNotes}
-            className="btn btn-outline-light"
-          >
-            Clear
-          </button>
-          <button onClick={this.submitAnswer} className="btn btn-outline-light">
-            Submit
-          </button>
-        </React.Fragment>
+        <div
+          className="submitControl"
+          style={{
+            // width: this.props.containerWidth,
+            height: heightRemaining * heightProportions.submitControl
+          }}
+        >
+          <TestController
+            clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+            play={this.play}
+            submitAnswer={this.submitAnswer}
+          />
+        </div>
       );
+    } else {
+      heightProportions = {
+        nav: 0.15,
+        header: 0.1,
+        info: 0.75
+      };
     }
     return (
-      <div className="homeContainer">
+      <div
+        className="homeContainer"
+        style={{
+          width: this.props.containerWidth,
+          height: this.props.containerHeight
+        }}
+      >
         <div
           className="nav"
           style={{
-            // width: this.props.containerWidth,
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.15
+            height: heightRemaining * heightProportions.nav
           }}
         >
           <Nav
             startRound={this.startRound}
-            toggleViewingStats={this.props.toggleViewingStats}
             inRound={this.state.inRound}
-            viewingStats={this.props.viewingStats}
-            playScale={this.playScale}
-            playInterval={this.playInterval}
-            playTeasedInterval={this.playTeasedInterval}
+            logUserOut={this.props.logUserOut}
+            endRound={this.endRound}
           />
         </div>
 
         <div
           className="header"
           style={{
-            // width: this.props.containerWidth,
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.1
+            height: heightRemaining * heightProportions.header
           }}
         >
           <Header
             inRound={this.state.inRound}
-            viewingStats={this.props.viewingStats}
             completedQuestions={this.state.completedQuestions}
             currentScore={this.getScore(this.state.completedQuestions)}
             timeRemaining={this.state.timeRemaining}
@@ -438,14 +471,10 @@ export default class Home extends React.Component {
           />
         </div>
 
-        {/* messengerBodyDiv.scrollTop(messengerBodyDiv.prop("scrollHeight")); */}
         <div
           className="info"
           style={{
-            // width: this.props.containerWidth,
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.6
+            height: heightRemaining * heightProportions.info
           }}
         >
           <Info
@@ -456,29 +485,18 @@ export default class Home extends React.Component {
           <div
             ref="infoScrollBottom"
             style={{
-              width: 100 + "%",
-              height: 1 + "px"
+              width: 100 + "%"
+              // height: 1 + "px"
             }}
           />
         </div>
 
-        <div
-          className="submitControl"
-          style={{
-            // width: this.props.containerWidth,
-            height:
-              (this.props.containerHeight - this.props.containerWidth * 0.27) *
-              0.15
-          }}
-        >
-          {submitControlButtons}
-        </div>
+        {submitControlButtons}
 
         <div
           className="responsivePianoContainer"
           style={{
-            // width: this.props.containerWidth,
-            height: this.props.containerWidth * 0.27
+            height: responsivePianoHeight
           }}
         >
           <div
@@ -492,6 +510,7 @@ export default class Home extends React.Component {
               disabled={this.props.disabled}
               currentAnswerNotes={this.state.currentAnswerNotes}
               hintNotes={this.state.hintNotes}
+              shownAnswers={this.state.shownAnswers}
               timeRemaining={this.state.timeRemaining}
               inRound={this.state.inRound}
               submitAnswerDisabled={this.state.submitAnswerDisabled}
