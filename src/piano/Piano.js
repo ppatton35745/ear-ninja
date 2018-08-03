@@ -125,9 +125,7 @@ class Piano extends React.Component {
     ) {
       return;
     }
-    const answerIndex = this.props.currentAnswerNotes.indexOf(
-      this.props.midiNumber
-    );
+    const answerIndex = this.props.currentAnswerNotes.indexOf(midiNumber);
     if (answerIndex === -1) {
       this.props.currentAnswerNotes.push(midiNumber);
       this.props.currentAnswerNotes.sort();

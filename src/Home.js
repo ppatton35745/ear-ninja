@@ -263,9 +263,10 @@ export default class Home extends React.Component {
         );
       }, 1400);
 
+      console.log("current question number");
       setTimeout(() => {
         this.setState({
-          currentQuestionNumber: this.state.currentQuestionNumber + 1,
+          // currentQuestionNumber: this.state.currentQuestionNumber + 1,
           currentQuestionNotes: [],
           currentAnswerNotes: [],
           initialPlay: false,
@@ -345,13 +346,71 @@ export default class Home extends React.Component {
         complete();
       } else {
         const roundTimeStamp = new Date();
-        const roundData = {
+        const roundId =
+          sessionStorage.getItem("activeUser") +
+          this.state.currentKey +
+          roundTimeStamp;
+
+        const roundData = Api.postRound({
+          id: roundId,
           userId: sessionStorage.getItem("activeUser"),
           timeStamp: roundTimeStamp,
-          musicKey: this.state.currentKey,
-          questions: this.state.completedQuestions
-        };
-        Api.postRound(roundData).then(complete());
+          musicKey: this.state.currentKey
+        });
+
+        const questionData = this.state.completedQuestions.map(question => {
+          question.questionNotes.map((note, index) => {
+            return Api.postQuestion({
+              id: roundId + question.questionNumber + (index + 1),
+              roundId: roundId,
+              questionNumber: question.questionNumber,
+              questionPartNumber: index + 1,
+              noteValue: note
+            });
+          });
+        });
+
+        const answerData = this.state.completedQuestions.map(question => {
+          question.answerNotes.map((note, index) => {
+            return Api.postAnswer({
+              id: roundId + question.questionNumber + (index + 1),
+              roundId: roundId,
+              questionNumber: question.questionNumber,
+              answerPartNumber: index + 1,
+              noteValue: note
+            });
+          });
+        });
+
+        Promise.all([roundData, questionData, answerData]).then(complete());
+        //   questionNumber: this.state.currentQuestionNumber,
+        // questionNotes: this.state.currentQuestionNotes.slice(),
+        // answerNotes: this.state.currentAnswerNotes.slice()
+
+        // {
+        //   "roundId": 1,
+        //   "questionNumber": 1,
+        //   "questionPartNumber": 1,
+        //   "value": 65
+        // },
+
+        //       let searchEmployees =  fetch(`http://localhost:5002/employees?q=${searchTerm}`)
+        // .then(e => e.json())
+
+        // let searchLocations =  fetch(`http://localhost:5002/locations?q=${searchTerm}`)
+        // .then(e => e.json())
+
+        // let searchAnimals =  fetch(`http://localhost:5002/animals?q=${searchTerm}`)
+        // .then(e => e.json())
+
+        // Promise.all([searchEmployees, searchLocations, searchAnimals]).then(searchResults => {
+        //   console.log(searchResults)
+        // });
+        // Api.postRound(roundData).then(
+        //   Api.postQuestions(questionData).then(
+        //     Api.postAnswers(answerData).then(complete())
+        //   )
+        // );
       }
     } else {
       early();
