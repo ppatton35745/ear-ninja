@@ -31,17 +31,22 @@ export default class Nav extends React.Component {
 
     return (
       <React.Fragment>
-        {buttons.map(button => {
-          return (
-            <button
-              key={button.key}
-              onClick={button.func}
-              className="btn btn-outline-light"
-            >
-              {button.name}
-            </button>
-          );
-        })}
+        <div className="navTitleDiv">
+          <h1 className="navTitle">ear-ninja</h1>
+        </div>
+        <div className="navButtonsDiv">
+          {buttons.map(button => {
+            return (
+              <button
+                key={button.key}
+                onClick={button.func}
+                className="btn btn-outline-light navButtons"
+              >
+                {button.name}
+              </button>
+            );
+          })}
+        </div>
       </React.Fragment>
     );
   }
