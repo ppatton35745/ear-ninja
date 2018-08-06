@@ -6,8 +6,22 @@
   justify-content: flex-start;
   align-items: flex-start;
   align-content: flex-start;
-  padding: 2% 5%;
+  padding: 2% 12%;
   overflow: auto;
+}
+
+.info .instructions {
+  width: 100%;
+}
+
+.info img {
+  height: 60px;
+  display: block;
+  margin: 15px;
+}
+
+.info .markedAnswers {
+  height: 100px;
 }
 
 ::-webkit-scrollbar {

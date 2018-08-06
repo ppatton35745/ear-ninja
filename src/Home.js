@@ -383,34 +383,6 @@ export default class Home extends React.Component {
         });
 
         Promise.all([roundData, questionData, answerData]).then(complete());
-        //   questionNumber: this.state.currentQuestionNumber,
-        // questionNotes: this.state.currentQuestionNotes.slice(),
-        // answerNotes: this.state.currentAnswerNotes.slice()
-
-        // {
-        //   "roundId": 1,
-        //   "questionNumber": 1,
-        //   "questionPartNumber": 1,
-        //   "value": 65
-        // },
-
-        //       let searchEmployees =  fetch(`http://localhost:5002/employees?q=${searchTerm}`)
-        // .then(e => e.json())
-
-        // let searchLocations =  fetch(`http://localhost:5002/locations?q=${searchTerm}`)
-        // .then(e => e.json())
-
-        // let searchAnimals =  fetch(`http://localhost:5002/animals?q=${searchTerm}`)
-        // .then(e => e.json())
-
-        // Promise.all([searchEmployees, searchLocations, searchAnimals]).then(searchResults => {
-        //   console.log(searchResults)
-        // });
-        // Api.postRound(roundData).then(
-        //   Api.postQuestions(questionData).then(
-        //     Api.postAnswers(answerData).then(complete())
-        //   )
-        // );
       }
     } else {
       early();
@@ -537,9 +509,12 @@ export default class Home extends React.Component {
           }}
         >
           <Info
+            width={this.props.containerWidth}
+            height={heightRemaining * heightProportions.info}
             completedQuestions={this.state.completedQuestions}
             inRound={this.state.inRound}
             scrollInfoToBottom={this.scrollInfoToBottom}
+            isCorrect={this.isCorrect}
           />
           <div
             ref="infoScrollBottom"

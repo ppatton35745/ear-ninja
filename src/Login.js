@@ -71,11 +71,6 @@ export default class Login extends Component {
     return (
       <div id="login-stuff">
         <form>
-          <img
-            alt=""
-            id="headline-image"
-            src="https://downloads.intercomcdn.com/i/o/2702/25ce9574b3a1dc309da496fc/Nutshell-logo-white%402x.png"
-          />
           <h3 className="secondary-headline">
             Please log in or register a new account
           </h3>
