@@ -11,15 +11,11 @@ percentage.
 
 ## Start-up Instructions
 
-### 'git clone git@github.com:ppatton35745/ear-ninja.git'
+### `git clone git@github.com:ppatton35745/ear-ninja.git`
 
 Clones the application to your machine
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### 'npm install'
+### `npm install`
 
 Install needed dependencies to run the application
 
@@ -58,5 +54,5 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Thanks To
 
-@iqnivek for the awesome user friedly [react-piano](https://github.com/iqnivek/react-piano)
+@iqnivek for the awesome user friedly [react-piano](https://github.com/iqnivek/react-piano)<br>
 @danigb for the great sounds provided by [soundfont-player](https://github.com/danigb/soundfont-player)
