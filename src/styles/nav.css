@@ -17,6 +17,11 @@
   align-items: center;
 }
 
+.navTitleDiv img {
+  height: 65%;
+  padding-right: 5px;
+}
+
 .navTitle {
   font-size: 3rem;
   color: white;
