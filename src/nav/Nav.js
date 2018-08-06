@@ -32,6 +32,8 @@ export default class Nav extends React.Component {
     return (
       <React.Fragment>
         <div className="navTitleDiv">
+          <img src="/img/Ninja256.png" alt="ninja" />
+          {/* http://www.rw-designer.com/icon-detail/5315 */}
           <h1 className="navTitle">ear-ninja</h1>
         </div>
         <div className="navButtonsDiv">
