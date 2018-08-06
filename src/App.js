@@ -1,5 +1,5 @@
 import React from "react";
-import SoundfontProvider from "./misc/SoundfontProvider";
+import SoundfontProvider from "./misc/SoundfontProvider/SoundfontProvider";
 import Home from "./Home";
 import DimensionsProvider from "./misc/DimensionsProvider";
 import Login from "./Login";
