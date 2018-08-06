@@ -1,21 +1,59 @@
-.deadPiano {
+/* .deadPianoWrapper {
   width: 31%;
   margin: 1%;
+  background-color: green;
+} */
+
+/* .info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  padding: 2% 5%;
+  overflow: auto;
+} */
+
+.deadPianoContainer {
+  margin: 4px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
+
+.deadPianoContainer.correct {
+  background-color: rgba(122, 226, 145, 0.253);
+}
+
+.deadPianoContainer.incorrect {
+  background-color: rgba(241, 74, 74, 0.185);
+}
+
+/* .deadPianoBackground {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+} */
 
 .ReactPiano__Key--correctAnswer {
   background-color: green;
 }
 
 .ReactPiano__Key--guessedAnswer.ReactPiano__Key--accidental {
-  border: 2px solid orange;
+  border: 3px solid blue;
   /* border-top: 1px solid purple; */
   /* Slight height reduction for "pushed-down" effect */
   height: 64%; /* was 65% */
 }
 
 .ReactPiano__Key--guessedAnswer.ReactPiano__Key--natural {
-  border: 2px solid orange;
+  border: 3px solid blue;
   /* Slight height reduction for "pushed-down" effect */
   height: 97%; /* was 98% */
 }

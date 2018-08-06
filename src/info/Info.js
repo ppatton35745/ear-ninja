@@ -7,7 +7,8 @@ export default class Info extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
     completedQuestions: PropTypes.array,
-    scrollInfoToBottom: PropTypes.func
+    scrollInfoToBottom: PropTypes.func,
+    isCorrect: PropTypes.func.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -18,22 +19,43 @@ export default class Info extends React.Component {
       this.props.scrollInfoToBottom();
     }
   }
+
   render() {
     if (this.props.completedQuestions.length > 0) {
       return (
         <React.Fragment>
           {this.props.completedQuestions.map(completedQuestion => {
+            let correctness = "deadPianoContainer";
+            if (
+              this.props.isCorrect(
+                completedQuestion.questionNotes,
+                completedQuestion.answerNotes
+              )
+            ) {
+              correctness = correctness + " " + "correct";
+            } else {
+              correctness = correctness + " " + "incorrect";
+            }
             return (
-              <div className="deadPiano">
-                <DimensionsProvider>
-                  {({ containerWidth, containerHeight }) => (
-                    <DeadPiano
-                      width={containerWidth}
-                      completedQuestion={completedQuestion}
-                      inRound={this.props.inRound}
-                    />
-                  )}
-                </DimensionsProvider>
+              <div
+                className={correctness}
+                style={{
+                  width: this.props.width * 0.29,
+                  height: this.props.width * 0.29 * 0.27
+                }}
+              >
+                <div
+                  className="deadPiano"
+                  style={{
+                    width: this.props.width * 0.29 * 0.94
+                  }}
+                >
+                  <DeadPiano
+                    width={this.props.width * 0.29 * 0.94}
+                    completedQuestion={completedQuestion}
+                    inRound={this.props.inRound}
+                  />
+                </div>
               </div>
             );
           })}
