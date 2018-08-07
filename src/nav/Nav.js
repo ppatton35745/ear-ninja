@@ -5,17 +5,27 @@ export default class Nav extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
     startRound: PropTypes.func,
+    viewStats: PropTypes.func,
     endRound: PropTypes.func,
-    logUserOut: PropTypes.func
+    logUserOut: PropTypes.func,
+    viewingStats: PropTypes.bool,
+    goHome: PropTypes.func
   };
 
   render() {
     let buttons = [];
 
-    if (!this.props.inRound) {
+    if (!this.props.inRound && !this.props.viewingStats) {
       buttons = [
         { key: 1, name: "Play Round", func: this.props.startRound },
-        { key: 2, name: "Logout", func: this.props.logUserOut }
+        { key: 2, name: "Stats", func: this.props.viewStats },
+        { key: 3, name: "Logout", func: this.props.logUserOut }
+      ];
+    } else if (this.props.viewingStats) {
+      buttons = [
+        { key: 1, name: "Play Round", func: this.props.startRound },
+        { key: 2, name: "Home", func: this.props.goHome },
+        { key: 3, name: "Logout", func: this.props.logUserOut }
       ];
     } else {
       buttons = [

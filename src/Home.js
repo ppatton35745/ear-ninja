@@ -32,6 +32,7 @@ export default class Home extends React.Component {
       hintNotes: [],
       shownAnswers: [],
       inRound: false,
+      viewingStats: false,
       timerRunning: false,
       submitAnswerDisabled: false
     };
@@ -55,11 +56,28 @@ export default class Home extends React.Component {
     this.noteRange = { min: 48, max: 72 };
   }
 
+  goHome = () => {
+    this.setState({
+      inRound: false,
+      viewingStats: false
+    });
+  };
+
   startRound = () => {
     if (!this.state.inRound) {
       this.setState({
         inRound: true,
+        viewingStats: false,
         completedQuestions: []
+      });
+    }
+  };
+
+  viewStats = () => {
+    if (!this.state.viewingStats) {
+      this.setState({
+        viewingStats: true,
+        inRound: false
       });
     }
   };
@@ -103,10 +121,13 @@ export default class Home extends React.Component {
   }
 
   getScore = results => {
+    console.log("getting score, results passed in: ", results);
     let questions = 0;
     let correctAnswers = 0;
     results.forEach(question => {
       let correct = true;
+      console.log("question notes", question.questionNotes);
+      console.log("answer notes", question.answerNotes);
 
       if (question.questionNotes.length === question.answerNotes.length) {
         question.questionNotes.forEach((questionNote, index) => {
@@ -298,19 +319,20 @@ export default class Home extends React.Component {
     return correct;
   };
 
-  getScore = () => {
-    let questions = 0;
-    let correctAnswers = 0;
-    this.state.completedQuestions.forEach(question => {
-      questions += 1;
+  // getScore = () => {
 
-      if (this.isCorrect(question.questionNotes, question.answerNotes)) {
-        correctAnswers += 1;
-      }
-    });
+  //   let questions = 0;
+  //   let correctAnswers = 0;
+  //   this.state.completedQuestions.forEach(question => {
+  //     questions += 1;
 
-    return { possible: questions, correct: correctAnswers };
-  };
+  //     if (this.isCorrect(question.questionNotes, question.answerNotes)) {
+  //       correctAnswers += 1;
+  //     }
+  //   });
+
+  //   return { possible: questions, correct: correctAnswers };
+  // };
 
   endRound = isRoundComplete => {
     const complete = () =>
@@ -429,104 +451,55 @@ export default class Home extends React.Component {
   };
 
   render() {
-    const responsivePianoHeight = this.props.containerWidth * 0.27;
-    const heightRemaining = this.props.containerHeight - responsivePianoHeight;
-
+    let responsivePianoHeight = null;
     let submitControlButtons = null;
     let heightProportions = null;
+    let heightRemaining = null;
+    let responsivePiano = null;
 
-    if (this.state.inRound) {
+    if (this.state.viewingStats) {
+      responsivePianoHeight = 0;
+      heightRemaining = this.props.containerHeight - responsivePianoHeight;
       heightProportions = {
-        nav: 0.15,
-        header: 0.1,
-        info: 0.6,
-        submitControl: 0.15
+        nav: 0.065,
+        header: 0.045,
+        info: 0.89
       };
-
-      submitControlButtons = (
-        <div
-          className="submitControl"
-          style={{
-            // width: this.props.containerWidth,
-            height: heightRemaining * heightProportions.submitControl
-          }}
-        >
-          <TestController
-            clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
-            play={this.play}
-            submitAnswer={this.submitAnswer}
-          />
-        </div>
-      );
     } else {
-      heightProportions = {
-        nav: 0.15,
-        header: 0.1,
-        info: 0.75
-      };
-    }
-    return (
-      <div
-        className="homeContainer"
-        style={{
-          width: this.props.containerWidth,
-          height: this.props.containerHeight
-        }}
-      >
-        <div
-          className="nav"
-          style={{
-            height: heightRemaining * heightProportions.nav
-          }}
-        >
-          <Nav
-            startRound={this.startRound}
-            inRound={this.state.inRound}
-            logUserOut={this.props.logUserOut}
-            endRound={this.endRound}
-          />
-        </div>
+      responsivePianoHeight = this.props.containerWidth * 0.27;
+      heightRemaining = this.props.containerHeight - responsivePianoHeight;
+      if (this.state.inRound) {
+        heightProportions = {
+          nav: 0.15,
+          header: 0.1,
+          info: 0.6,
+          submitControl: 0.15
+        };
 
-        <div
-          className="header"
-          style={{
-            height: heightRemaining * heightProportions.header
-          }}
-        >
-          <Header
-            inRound={this.state.inRound}
-            completedQuestions={this.state.completedQuestions}
-            currentScore={this.getScore(this.state.completedQuestions)}
-            timeRemaining={this.state.timeRemaining}
-            currentKey={this.state.currentKey}
-          />
-        </div>
-
-        <div
-          className="info"
-          style={{
-            height: heightRemaining * heightProportions.info
-          }}
-        >
-          <Info
-            width={this.props.containerWidth}
-            height={heightRemaining * heightProportions.info}
-            completedQuestions={this.state.completedQuestions}
-            inRound={this.state.inRound}
-            scrollInfoToBottom={this.scrollInfoToBottom}
-            isCorrect={this.isCorrect}
-          />
+        submitControlButtons = (
           <div
-            ref="infoScrollBottom"
+            className="submitControl"
             style={{
-              width: 100 + "%"
-              // height: 1 + "px"
+              // width: this.props.containerWidth,
+              height: heightRemaining * heightProportions.submitControl
             }}
-          />
-        </div>
+          >
+            <TestController
+              clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+              play={this.play}
+              submitAnswer={this.submitAnswer}
+            />
+          </div>
+        );
+      } else {
+        heightProportions = {
+          nav: 0.15,
+          header: 0.1,
+          info: 0.75
+        };
+      }
 
-        {submitControlButtons}
-
+      responsivePiano = (
         <div
           className="responsivePianoContainer"
           style={{
@@ -551,6 +524,78 @@ export default class Home extends React.Component {
             />
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div
+        className="homeContainer"
+        style={{
+          width: this.props.containerWidth,
+          height: this.props.containerHeight
+        }}
+      >
+        <div
+          className="nav"
+          style={{
+            height: heightRemaining * heightProportions.nav
+          }}
+        >
+          <Nav
+            startRound={this.startRound}
+            inRound={this.state.inRound}
+            logUserOut={this.props.logUserOut}
+            endRound={this.endRound}
+            viewingStats={this.state.viewingStats}
+            viewStats={this.viewStats}
+            goHome={this.goHome}
+          />
+        </div>
+
+        <div
+          className="header"
+          style={{
+            height: heightRemaining * heightProportions.header
+          }}
+        >
+          <Header
+            inRound={this.state.inRound}
+            completedQuestions={this.state.completedQuestions}
+            currentScore={this.getScore(this.state.completedQuestions)}
+            timeRemaining={this.state.timeRemaining}
+            currentKey={this.state.currentKey}
+            viewingStats={this.state.viewingStats}
+          />
+        </div>
+
+        <div
+          className="info"
+          style={{
+            height: heightRemaining * heightProportions.info
+          }}
+        >
+          <Info
+            width={this.props.containerWidth}
+            height={heightRemaining * heightProportions.info}
+            completedQuestions={this.state.completedQuestions}
+            inRound={this.state.inRound}
+            scrollInfoToBottom={this.scrollInfoToBottom}
+            isCorrect={this.isCorrect}
+            viewingStats={this.state.viewingStats}
+            getScore={this.getScore}
+          />
+          <div
+            ref="infoScrollBottom"
+            style={{
+              width: 100 + "%"
+              // height: 1 + "px"
+            }}
+          />
+        </div>
+
+        {submitControlButtons}
+
+        {responsivePiano}
       </div>
     );
   }

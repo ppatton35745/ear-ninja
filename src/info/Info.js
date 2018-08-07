@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DeadPiano from "../deadPiano/DeadPiano";
+import ScoreChart from "../charts/Score.js";
 
 export default class Info extends React.Component {
   static propTypes = {
@@ -20,7 +21,9 @@ export default class Info extends React.Component {
   }
 
   render() {
-    if (this.props.completedQuestions.length > 0) {
+    if (this.props.viewingStats) {
+      return <ScoreChart getScore={this.props.getScore} />;
+    } else if (this.props.completedQuestions.length > 0) {
       return (
         <React.Fragment>
           {this.props.completedQuestions.map(completedQuestion => {

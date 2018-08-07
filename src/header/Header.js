@@ -7,11 +7,18 @@ export default class Header extends React.Component {
     completedQuestions: PropTypes.array,
     currentKey: PropTypes.string,
     timeRemaining: PropTypes.number,
-    currentScore: PropTypes.object
+    currentScore: PropTypes.object,
+    viewingStats: PropTypes.bool
   };
 
   render() {
-    if (this.props.inRound) {
+    if (this.props.viewingStats) {
+      return (
+        <React.Fragment>
+          <h2 className="infoHeader">Statistics</h2>
+        </React.Fragment>
+      );
+    } else if (this.props.inRound) {
       return (
         <React.Fragment>
           <h2 className="roundHeader">
