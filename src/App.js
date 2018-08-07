@@ -13,9 +13,14 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      viewingStats: false
     };
   }
+
+  setViewingStats = viewingStats => {
+    this.setState({ viewingStats: viewingStats });
+  };
 
   isAuthenticated = () => {
     return sessionStorage.getItem("activeUser");
@@ -36,6 +41,12 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.loggedIn || this.isAuthenticated()) {
+      if (this.state.viewingStats) {
+        <Stats
+          logUserOut={this.logUserOut}
+          setViewingStats={this.setViewingStats}
+        />;
+      }
       return (
         <SoundfontProvider
           instrumentName="acoustic_grand_piano"
