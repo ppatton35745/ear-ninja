@@ -4,10 +4,11 @@ import ResponsivePiano from "./responsivePiano/ResponsivePiano";
 import TestController from "./tester/TestController";
 import Nav from "./nav/Nav";
 import Header from "./header/Header";
-import Info from "./info/Info";
+import CompletedQuestions from "./info/CompletedQuestions";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
+import Instruction from "./Instructions";
 
 export default class Home extends React.Component {
   static propTypes = {
@@ -434,6 +435,9 @@ export default class Home extends React.Component {
 
     let submitControlButtons = null;
     let heightProportions = null;
+    let Nav = null;
+    let Info = null;
+    let Header = null;
 
     if (this.state.inRound) {
       heightProportions = {
@@ -442,6 +446,53 @@ export default class Home extends React.Component {
         info: 0.6,
         submitControl: 0.15
       };
+
+      Nav = (
+        <Nav endRound={{ key: 1, label: "End Round", func: this.endRound }} />
+      );
+
+      Header = (
+        <Header className="roundHeader">
+          {[
+            { className: "label timeLabel", value: "Time:" },
+            { className: "timeRemaining", value: this.state.timeRemaining },
+            { className: "label keyLabel", value: "Key:" },
+            { className: "musicKey", value: this.state.currentKey },
+            {
+              className: "label scoreLabel",
+              value: "Score:"
+            },
+            {
+              className: "score",
+              value: () => {
+                const currentScore = this.getScore(
+                  this.state.completedQuestions
+                );
+                `${currentScore.correct}/${currentScore.possible}`;
+              }
+            }
+          ]}
+        </Header>
+      );
+
+      Info = (
+        <React.Fragment>
+          <CompletedQuestions
+            width={this.props.containerWidth}
+            height={heightRemaining * heightProportions.info}
+            completedQuestions={this.state.completedQuestions}
+            scrollInfoToBottom={this.scrollInfoToBottom}
+            isCorrect={this.isCorrect}
+          />
+          <div
+            ref="infoScrollBottom"
+            style={{
+              width: 100 + "%"
+              // height: 1 + "px"
+            }}
+          />
+        </React.Fragment>
+      );
 
       submitControlButtons = (
         <div
@@ -464,7 +515,68 @@ export default class Home extends React.Component {
         header: 0.1,
         info: 0.75
       };
+
+      Nav = (
+        <Nav
+          startRound={{ key: 1, label: "Play Round", func: this.startRound }}
+          setViewingStats={{
+            key: 2,
+            label: "Stats",
+            func: () => this.props.setViewingStats(true)
+          }}
+          logUserOut={{ key: 3, label: "Log Out", func: this.props.logUserOut }}
+        />
+      );
+
+      if (this.state.completedQuestions.length > 0) {
+        Header = (
+          <Header className="roundHeader">
+            {[
+              { className: "roundCompleteMessage", value: "Round Complete!" },
+              {
+                className: "label scoreLabel",
+                value: "Score:"
+              },
+              {
+                className: "score",
+                value: () => {
+                  const currentScore = this.getScore(
+                    this.state.completedQuestions
+                  );
+                  `${currentScore.correct}/${currentScore.possible}`;
+                }
+              }
+            ]}
+          </Header>
+        );
+        Info = (
+          <React.Fragment>
+            <CompletedQuestions
+              width={this.props.containerWidth}
+              height={heightRemaining * heightProportions.info}
+              completedQuestions={this.state.completedQuestions}
+              scrollInfoToBottom={this.scrollInfoToBottom}
+              isCorrect={this.isCorrect}
+            />
+            <div
+              ref="infoScrollBottom"
+              style={{
+                width: 100 + "%"
+                // height: 1 + "px"
+              }}
+            />
+          </React.Fragment>
+        );
+      } else {
+        Header = (
+          <Header className="infoHeader">
+            {[{ className: "welcome", value: "Welcome to ear-ninja" }]}
+          </Header>
+        );
+        Info = <Instructions />;
+      }
     }
+
     return (
       <div
         className="homeContainer"
@@ -479,12 +591,7 @@ export default class Home extends React.Component {
             height: heightRemaining * heightProportions.nav
           }}
         >
-          <Nav
-            startRound={this.startRound}
-            inRound={this.state.inRound}
-            logUserOut={this.props.logUserOut}
-            endRound={this.endRound}
-          />
+          {Nav}
         </div>
 
         <div
@@ -493,13 +600,7 @@ export default class Home extends React.Component {
             height: heightRemaining * heightProportions.header
           }}
         >
-          <Header
-            inRound={this.state.inRound}
-            completedQuestions={this.state.completedQuestions}
-            currentScore={this.getScore(this.state.completedQuestions)}
-            timeRemaining={this.state.timeRemaining}
-            currentKey={this.state.currentKey}
-          />
+          {Header}
         </div>
 
         <div
@@ -508,21 +609,7 @@ export default class Home extends React.Component {
             height: heightRemaining * heightProportions.info
           }}
         >
-          <Info
-            width={this.props.containerWidth}
-            height={heightRemaining * heightProportions.info}
-            completedQuestions={this.state.completedQuestions}
-            inRound={this.state.inRound}
-            scrollInfoToBottom={this.scrollInfoToBottom}
-            isCorrect={this.isCorrect}
-          />
-          <div
-            ref="infoScrollBottom"
-            style={{
-              width: 100 + "%"
-              // height: 1 + "px"
-            }}
-          />
+          {Info}
         </div>
 
         {submitControlButtons}

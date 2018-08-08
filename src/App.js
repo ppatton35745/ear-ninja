@@ -62,6 +62,7 @@ export default class App extends React.Component {
                   containerWidth={containerWidth}
                   containerHeight={containerHeight}
                   logUserOut={this.logUserOut}
+                  setViewingStats={this.setViewingStats}
                 />
               )}
             </DimensionsProvider>

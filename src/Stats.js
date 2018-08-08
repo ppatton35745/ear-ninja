@@ -18,37 +18,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      timeRemaining: 60,
-      currentKey: "",
-      currentQuestionNumber: 0,
-      currentQuestionNotes: [],
-      currentAnswerNotes: [],
-      completedQuestions: [],
-      hintNotes: [],
-      shownAnswers: [],
-      inRound: false,
-      timerRunning: false,
-      submitAnswerDisabled: false
-    };
-    this.musicKeys = [
-      "C",
-      "Db",
-      "D",
-      "Eb",
-      "E",
-      "F",
-      "Gb",
-      "G",
-      "Ab",
-      "A",
-      "Bb",
-      "B"
-    ];
-    this.seedNotes = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
-    this.upPattern = [2, 2, 1, 2, 2, 2, 1];
-    this.downPattern = [1, 2, 2, 2, 1, 2, 2];
-    this.noteRange = { min: 48, max: 72 };
+    this.state = {};
   }
 
   getScore = results => {
@@ -113,25 +83,27 @@ export default class Home extends React.Component {
     return (
       <div className="homeContainer">
         <div className="nav">
-          <Nav
-            startRound={this.startRound}
-            inRound={this.state.inRound}
-            logUserOut={this.props.logUserOut}
-            endRound={this.endRound}
-          />
+          <Nav>
+            {[
+              {
+                key: 1,
+                label: "Home",
+                func: () => this.props.setViewingStats(true)
+              },
+              {
+                key: 2,
+                label: "Log Out",
+                func: this.props.logUserOut
+              }
+            ]}
+          </Nav>
         </div>
 
         <div className="header">
-          <Header
-            inRound={this.state.inRound}
-            completedQuestions={this.state.completedQuestions}
-            currentScore={this.getScore(this.state.completedQuestions)}
-            timeRemaining={this.state.timeRemaining}
-            currentKey={this.state.currentKey}
-          />
+          <Header>{[{ className: "statsHeader", value: "Stats" }]}</Header>
         </div>
 
-        <div className="info">
+        <div className="charts">
           <Info
             width={this.props.containerWidth}
             height={heightRemaining * heightProportions.info}
