@@ -8,6 +8,7 @@ import Info from "./info/Info";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
+import getNavInfo from "./nav/navInfo";
 
 export default class Home extends React.Component {
   static propTypes = {
@@ -80,39 +81,16 @@ export default class Home extends React.Component {
   componentDidUpdate(prevProps, prevState) {}
 
   render() {
+    const navInfo = getNavInfo("stats");
     return (
       <div className="homeContainer">
-        <div className="nav">
-          <Nav>
-            {[
-              {
-                key: 1,
-                label: "Home",
-                func: () => this.props.setViewingStats(true)
-              },
-              {
-                key: 2,
-                label: "Log Out",
-                func: this.props.logUserOut
-              }
-            ]}
-          </Nav>
-        </div>
+        <div className="nav">{navInfo}</div>
 
         <div className="header">
           <Header>{[{ className: "statsHeader", value: "Stats" }]}</Header>
         </div>
 
-        <div className="charts">
-          <Info
-            width={this.props.containerWidth}
-            height={heightRemaining * heightProportions.info}
-            completedQuestions={this.state.completedQuestions}
-            inRound={this.state.inRound}
-            scrollInfoToBottom={this.scrollInfoToBottom}
-            isCorrect={this.isCorrect}
-          />
-        </div>
+        <div className="charts" />
       </div>
     );
   }

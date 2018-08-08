@@ -9,6 +9,7 @@ import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
 import Instruction from "./Instructions";
+import getNavInfo from "./nav/navInfo";
 
 export default class Home extends React.Component {
   static propTypes = {
@@ -102,31 +103,6 @@ export default class Home extends React.Component {
       }
     }, 1000);
   }
-
-  getScore = results => {
-    let questions = 0;
-    let correctAnswers = 0;
-    results.forEach(question => {
-      let correct = true;
-
-      if (question.questionNotes.length === question.answerNotes.length) {
-        question.questionNotes.forEach((questionNote, index) => {
-          if (questionNote !== question.answerNotes[index]) {
-            correct = false;
-          }
-        });
-      } else {
-        correct = false;
-      }
-
-      questions += 1;
-      if (correct) {
-        correctAnswers += 1;
-      }
-    });
-
-    return { possible: questions, correct: correctAnswers };
-  };
 
   changeNoteStatus = (collection, note, action) => {
     const inCollection = this.state[collection].includes(note);
@@ -264,10 +240,8 @@ export default class Home extends React.Component {
         );
       }, 1400);
 
-      console.log("current question number");
       setTimeout(() => {
         this.setState({
-          // currentQuestionNumber: this.state.currentQuestionNumber + 1,
           currentQuestionNotes: [],
           currentAnswerNotes: [],
           initialPlay: false,
@@ -299,10 +273,10 @@ export default class Home extends React.Component {
     return correct;
   };
 
-  getScore = () => {
+  getScore = results => {
     let questions = 0;
     let correctAnswers = 0;
-    this.state.completedQuestions.forEach(question => {
+    results.forEach(question => {
       questions += 1;
 
       if (this.isCorrect(question.questionNotes, question.answerNotes)) {
@@ -393,14 +367,20 @@ export default class Home extends React.Component {
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
+    // If in Round
     if (this.state.inRound) {
+      // Make sure key is set
       if (this.state.currentKey === "") {
         this.setCurrentKey();
-      } else if (this.state.currentQuestionNotes.length === 0) {
+      }
+      // If question is empty pick new one
+      else if (this.state.currentQuestionNotes.length === 0) {
         const indexOfCurrentKey = this.musicKeys.indexOf(this.state.currentKey);
         const seedNote = this.seedNotes[indexOfCurrentKey];
         this.setCurrentQuestionNotes(seedNote);
-      } else if (
+      }
+      // If this is the first question play scale then interval
+      else if (
         !this.state.timerRunning &&
         this.state.currentQuestionNumber !== prevState.currentQuestionNumber &&
         this.state.currentQuestionNumber === 1
@@ -410,7 +390,9 @@ export default class Home extends React.Component {
           this.play("interval");
           this.startTimer();
         }, 4000);
-      } else if (this.state.timerRunning) {
+      }
+      // When timer runs out end round, otherwise play the interval each time a new question is set
+      else if (this.state.timerRunning) {
         if (this.state.timeRemaining <= 0) {
           const isRoundComplete = true;
           this.endRound(isRoundComplete);
@@ -423,21 +405,12 @@ export default class Home extends React.Component {
     }
   }
 
-  scrollInfoToBottom = () => {
-    setTimeout(() => {
-      this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
-    });
-  };
-
   render() {
     const responsivePianoHeight = this.props.containerWidth * 0.27;
     const heightRemaining = this.props.containerHeight - responsivePianoHeight;
 
     let submitControlButtons = null;
     let heightProportions = null;
-    let Nav = null;
-    let Info = null;
-    let Header = null;
 
     if (this.state.inRound) {
       heightProportions = {
@@ -447,51 +420,20 @@ export default class Home extends React.Component {
         submitControl: 0.15
       };
 
-      Nav = (
-        <Nav endRound={{ key: 1, label: "End Round", func: this.endRound }} />
+      const navInfo = getNavInfo("home", this.state.inRound);
+      const headerInfo = getHeaderInfo(
+        "home",
+        this.state.inRound,
+        this.state.completedQuestions.length
       );
-
-      Header = (
-        <Header className="roundHeader">
-          {[
-            { className: "label timeLabel", value: "Time:" },
-            { className: "timeRemaining", value: this.state.timeRemaining },
-            { className: "label keyLabel", value: "Key:" },
-            { className: "musicKey", value: this.state.currentKey },
-            {
-              className: "label scoreLabel",
-              value: "Score:"
-            },
-            {
-              className: "score",
-              value: () => {
-                const currentScore = this.getScore(
-                  this.state.completedQuestions
-                );
-                `${currentScore.correct}/${currentScore.possible}`;
-              }
-            }
-          ]}
-        </Header>
-      );
-
-      Info = (
-        <React.Fragment>
-          <CompletedQuestions
-            width={this.props.containerWidth}
-            height={heightRemaining * heightProportions.info}
-            completedQuestions={this.state.completedQuestions}
-            scrollInfoToBottom={this.scrollInfoToBottom}
-            isCorrect={this.isCorrect}
-          />
-          <div
-            ref="infoScrollBottom"
-            style={{
-              width: 100 + "%"
-              // height: 1 + "px"
-            }}
-          />
-        </React.Fragment>
+      const infoInfo = getInfoInfo(
+        this.state.inRound,
+        this.state.completedQuestions.length,
+        this.props.containerWidth,
+        heightRemaining * heightProportions.info,
+        this.state.completedQuestions,
+        this.scrollInfoToBottom,
+        this.isCorrect
       );
 
       submitControlButtons = (
@@ -516,67 +458,6 @@ export default class Home extends React.Component {
         info: 0.75
       };
 
-      Nav = (
-        <Nav
-          startRound={{ key: 1, label: "Play Round", func: this.startRound }}
-          setViewingStats={{
-            key: 2,
-            label: "Stats",
-            func: () => this.props.setViewingStats(true)
-          }}
-          logUserOut={{ key: 3, label: "Log Out", func: this.props.logUserOut }}
-        />
-      );
-
-      if (this.state.completedQuestions.length > 0) {
-        Header = (
-          <Header className="roundHeader">
-            {[
-              { className: "roundCompleteMessage", value: "Round Complete!" },
-              {
-                className: "label scoreLabel",
-                value: "Score:"
-              },
-              {
-                className: "score",
-                value: () => {
-                  const currentScore = this.getScore(
-                    this.state.completedQuestions
-                  );
-                  `${currentScore.correct}/${currentScore.possible}`;
-                }
-              }
-            ]}
-          </Header>
-        );
-        Info = (
-          <React.Fragment>
-            <CompletedQuestions
-              width={this.props.containerWidth}
-              height={heightRemaining * heightProportions.info}
-              completedQuestions={this.state.completedQuestions}
-              scrollInfoToBottom={this.scrollInfoToBottom}
-              isCorrect={this.isCorrect}
-            />
-            <div
-              ref="infoScrollBottom"
-              style={{
-                width: 100 + "%"
-                // height: 1 + "px"
-              }}
-            />
-          </React.Fragment>
-        );
-      } else {
-        Header = (
-          <Header className="infoHeader">
-            {[{ className: "welcome", value: "Welcome to ear-ninja" }]}
-          </Header>
-        );
-        Info = <Instructions />;
-      }
-    }
-
     return (
       <div
         className="homeContainer"
@@ -591,7 +472,7 @@ export default class Home extends React.Component {
             height: heightRemaining * heightProportions.nav
           }}
         >
-          {Nav}
+          {navInfo}
         </div>
 
         <div
@@ -600,7 +481,7 @@ export default class Home extends React.Component {
             height: heightRemaining * heightProportions.header
           }}
         >
-          {Header}
+          {headerInfo}
         </div>
 
         <div
