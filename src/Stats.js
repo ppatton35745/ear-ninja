@@ -47,50 +47,22 @@ export default class Home extends React.Component {
     return { possible: questions, correct: correctAnswers };
   };
 
-  isCorrect = (questionNotes, answerNotes) => {
-    let correct = true;
-
-    if (questionNotes.length === answerNotes.length) {
-      questionNotes.forEach((questionNote, index) => {
-        if (questionNote !== answerNotes[index]) {
-          correct = false;
-        }
-      });
-    } else {
-      correct = false;
-    }
-    return correct;
-  };
-
-  getScore = () => {
-    let questions = 0;
-    let correctAnswers = 0;
-    this.state.completedQuestions.forEach(question => {
-      questions += 1;
-
-      if (this.isCorrect(question.questionNotes, question.answerNotes)) {
-        correctAnswers += 1;
-      }
-    });
-
-    return { possible: questions, correct: correctAnswers };
-  };
-
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {}
 
   render() {
-    const navInfo = getNavInfo("stats");
+    const Nav = getNav(
+      "home",
+      this.props.logUserOut,
+      this.props.setViewingStats
+    );
+    const Header = getHeader("stats");
     return (
       <div className="homeContainer">
-        <div className="nav">{navInfo}</div>
-
-        <div className="header">
-          <Header>{[{ className: "statsHeader", value: "Stats" }]}</Header>
-        </div>
-
-        <div className="charts" />
+        {Nav}
+        {Header}
+        <div className="charts">These charts are ass</div>
       </div>
     );
   }

@@ -2,37 +2,38 @@ import React from "react";
 import CompletedQuestions from "./CompletedQuestions";
 import Instructions from "./Instructions";
 
-const getInfoInfo = (
+const getInfo = (
   inRound,
   completedQuestionLength,
   width,
-  height,
   completedQuestions,
   scrollInfoToBottom,
   isCorrect
 ) => {
   if (inRound || completedQuestionLength > 0) {
     return (
-      <React.Fragment>
+      <div className="info">
         <CompletedQuestions
-          width={this.props.containerWidth}
-          height={heightRemaining * heightProportions.info}
-          completedQuestions={this.state.completedQuestions}
-          scrollInfoToBottom={this.scrollInfoToBottom}
-          isCorrect={this.isCorrect}
+          width={width}
+          completedQuestions={completedQuestions}
+          scrollInfoToBottom={scrollInfoToBottom}
+          isCorrect={isCorrect}
         />
         <div
           ref="infoScrollBottom"
           style={{
             width: 100 + "%"
-            // height: 1 + "px"
           }}
         />
-      </React.Fragment>
+      </div>
     );
   } else {
-    return <Instructions />;
+    return (
+      <div className="info">
+        <Instructions />
+      </div>
+    );
   }
 };
 
-export default getHeaderInfo;
+export default getInfo;

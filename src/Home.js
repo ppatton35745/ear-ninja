@@ -1,15 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ResponsivePiano from "./responsivePiano/ResponsivePiano";
-import TestController from "./tester/TestController";
-import Nav from "./nav/Nav";
-import Header from "./header/Header";
-import CompletedQuestions from "./info/CompletedQuestions";
 import getInterval from "./tester/getInterval";
 import hinter from "./tester/hinter";
 import Api from "./api/apiManager";
-import Instruction from "./Instructions";
-import getNavInfo from "./nav/navInfo";
+import getNav from "./nav/getNav";
+import getHeader from "./header/getHeader";
+import getInfo from "./info/getInfo";
+import RoundControl from "./tester/RoundControl";
 
 export default class Home extends React.Component {
   static propTypes = {
@@ -407,56 +405,30 @@ export default class Home extends React.Component {
 
   render() {
     const responsivePianoHeight = this.props.containerWidth * 0.27;
-    const heightRemaining = this.props.containerHeight - responsivePianoHeight;
-
-    let submitControlButtons = null;
-    let heightProportions = null;
-
-    if (this.state.inRound) {
-      heightProportions = {
-        nav: 0.15,
-        header: 0.1,
-        info: 0.6,
-        submitControl: 0.15
-      };
-
-      const navInfo = getNavInfo("home", this.state.inRound);
-      const headerInfo = getHeaderInfo(
-        "home",
-        this.state.inRound,
-        this.state.completedQuestions.length
-      );
-      const infoInfo = getInfoInfo(
-        this.state.inRound,
-        this.state.completedQuestions.length,
-        this.props.containerWidth,
-        heightRemaining * heightProportions.info,
-        this.state.completedQuestions,
-        this.scrollInfoToBottom,
-        this.isCorrect
-      );
-
-      submitControlButtons = (
-        <div
-          className="submitControl"
-          style={{
-            // width: this.props.containerWidth,
-            height: heightRemaining * heightProportions.submitControl
-          }}
-        >
-          <TestController
-            clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
-            play={this.play}
-            submitAnswer={this.submitAnswer}
-          />
-        </div>
-      );
-    } else {
-      heightProportions = {
-        nav: 0.15,
-        header: 0.1,
-        info: 0.75
-      };
+    const Nav = getNav(
+      "home",
+      this.props.logUserOut,
+      this.props.setViewingStats,
+      this.state.inRound,
+      this.endRound,
+      this.startRound
+    );
+    const Header = getHeader(
+      "home",
+      this.state.inRound,
+      this.state.completedQuestions.length,
+      this.state.timeRemaining,
+      this.state.currentKey,
+      this.getScore
+    );
+    const Info = getInfo(
+      this.state.inRound,
+      this.state.completedQuestions.length,
+      this.props.containerWidth,
+      this.state.completedQuestions,
+      this.scrollInfoToBottom,
+      this.isCorrect
+    );
 
     return (
       <div
@@ -466,35 +438,15 @@ export default class Home extends React.Component {
           height: this.props.containerHeight
         }}
       >
-        <div
-          className="nav"
-          style={{
-            height: heightRemaining * heightProportions.nav
-          }}
-        >
-          {navInfo}
-        </div>
-
-        <div
-          className="header"
-          style={{
-            height: heightRemaining * heightProportions.header
-          }}
-        >
-          {headerInfo}
-        </div>
-
-        <div
-          className="info"
-          style={{
-            height: heightRemaining * heightProportions.info
-          }}
-        >
-          {Info}
-        </div>
-
-        {submitControlButtons}
-
+        {Nav}
+        {Header}
+        {Info}
+        <RoundControl
+          inRound={this.state.inRound}
+          clearCurrentAnswerNotes={this.clearCurrentAnswerNotes}
+          play={this.play}
+          submitAnswer={this.submitAnswer}
+        />
         <div
           className="responsivePianoContainer"
           style={{
