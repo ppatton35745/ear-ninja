@@ -408,6 +408,12 @@ export default class Home extends React.Component {
     }
   }
 
+  scrollInfoToBottom = () => {
+    setTimeout(() => {
+      this.refs.infoScrollBottom.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+
   render() {
     const responsivePianoHeight = this.props.containerWidth * 0.27;
     const Nav = getNav(
