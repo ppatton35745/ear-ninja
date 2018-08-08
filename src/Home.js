@@ -272,6 +272,7 @@ export default class Home extends React.Component {
   };
 
   getScore = results => {
+    console.log("getting score, results:", results);
     if (results && results.length > 0) {
       let questions = 0;
       let correctAnswers = 0;
@@ -415,7 +416,7 @@ export default class Home extends React.Component {
   };
 
   render() {
-    const responsivePianoHeight = this.props.containerWidth * 0.27;
+    const responsivePianoHeight = this.props.containerWidth * 0.75 * 0.27;
     const Nav = getNav(
       "home",
       this.props.logUserOut,
@@ -427,14 +428,13 @@ export default class Home extends React.Component {
     const Header = getHeader(
       "home",
       this.state.inRound,
-      this.state.completedQuestions.length,
+      this.state.completedQuestions,
       this.state.timeRemaining,
       this.state.currentKey,
       this.getScore
     );
     const Info = getInfo(
       this.state.inRound,
-      this.state.completedQuestions.length,
       this.props.containerWidth,
       this.state.completedQuestions,
       this.scrollInfoToBottom,
@@ -468,10 +468,10 @@ export default class Home extends React.Component {
         >
           <div
             className="responsivePiano"
-            style={{ width: this.props.containerWidth * 0.9 }}
+            style={{ width: this.props.containerWidth * 0.7 }}
           >
             <ResponsivePiano
-              width={this.props.containerWidth * 0.9}
+              width={this.props.containerWidth * 0.7}
               onPlayNote={this.props.onPlayNote}
               onStopNote={this.props.onStopNote}
               disabled={this.props.disabled}

@@ -33,7 +33,7 @@ export default class App extends React.Component {
 
   logUserOut = () => {
     sessionStorage.removeItem("activeUser");
-    this.setState({ loggedIn: false });
+    this.setState({ loggedIn: false, viewingStats: false });
   };
 
   componentDidMount() {}
@@ -43,33 +43,36 @@ export default class App extends React.Component {
   render() {
     if (this.state.loggedIn || this.isAuthenticated()) {
       if (this.state.viewingStats) {
-        <Stats
-          logUserOut={this.logUserOut}
-          setViewingStats={this.setViewingStats}
-        />;
+        return (
+          <Stats
+            logUserOut={this.logUserOut}
+            setViewingStats={this.setViewingStats}
+          />
+        );
+      } else {
+        return (
+          <SoundfontProvider
+            instrumentName="acoustic_grand_piano"
+            audioContext={audioContext}
+            hostname={soundfontHostname}
+            render={({ isLoading, playNote, stopNote }) => (
+              <DimensionsProvider className="dimensionProvider">
+                {({ containerWidth, containerHeight }) => (
+                  <Home
+                    onPlayNote={playNote}
+                    onStopNote={stopNote}
+                    disabled={isLoading}
+                    containerWidth={containerWidth}
+                    containerHeight={containerHeight}
+                    logUserOut={this.logUserOut}
+                    setViewingStats={this.setViewingStats}
+                  />
+                )}
+              </DimensionsProvider>
+            )}
+          />
+        );
       }
-      return (
-        <SoundfontProvider
-          instrumentName="acoustic_grand_piano"
-          audioContext={audioContext}
-          hostname={soundfontHostname}
-          render={({ isLoading, playNote, stopNote }) => (
-            <DimensionsProvider className="dimensionProvider">
-              {({ containerWidth, containerHeight }) => (
-                <Home
-                  onPlayNote={playNote}
-                  onStopNote={stopNote}
-                  disabled={isLoading}
-                  containerWidth={containerWidth}
-                  containerHeight={containerHeight}
-                  logUserOut={this.logUserOut}
-                  setViewingStats={this.setViewingStats}
-                />
-              )}
-            </DimensionsProvider>
-          )}
-        />
-      );
     } else {
       return <Login key={Date.now()} logUserIn={this.logUserIn} />;
     }

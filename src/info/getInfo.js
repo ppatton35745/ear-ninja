@@ -4,7 +4,6 @@ import Instructions from "./Instructions";
 
 const getInfo = (
   inRound,
-  completedQuestionLength,
   width,
   completedQuestions,
   scrollInfoToBottom,
@@ -12,12 +11,13 @@ const getInfo = (
   containerHeight,
   PianoHeight
 ) => {
-  if (inRound || completedQuestionLength > 0) {
+  if (inRound || completedQuestions.length > 0) {
     return (
       <div
         className="info"
         style={{
-          height: containerHeight - 120 - PianoHeight + "px"
+          height:
+            containerHeight - 120 - PianoHeight + (inRound ? -50 : 0) + "px"
         }}
       >
         <CompletedQuestions

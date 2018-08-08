@@ -46,7 +46,7 @@ export default class Stats extends React.Component {
 
   render() {
     const Nav = getNav(
-      "home",
+      "stats",
       this.props.logUserOut,
       this.props.setViewingStats
     );

@@ -14,7 +14,9 @@ const getNav = (
       if (inRound) {
         return (
           <div className="nav">
-            <Nav>{[{ key: 1, label: "End Round", func: endRound }]}</Nav>
+            <Nav>
+              {[{ key: 1, label: "End Round", func: () => endRound(false) }]}
+            </Nav>
           </div>
         );
       } else {
@@ -44,7 +46,7 @@ const getNav = (
               {
                 key: 1,
                 label: "Home",
-                func: () => setViewingStats(true)
+                func: () => setViewingStats(false)
               },
               {
                 key: 2,

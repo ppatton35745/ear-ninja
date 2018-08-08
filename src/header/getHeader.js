@@ -9,10 +9,10 @@ const getHeader = (
   currentKey,
   getScore
 ) => {
-  const currentScore = getScore(completedQuestions);
+  const currentScore = getScore ? getScore(completedQuestions) : null;
   switch (page) {
     case "home": {
-      if (inRound || completedQuestions.length > 0) {
+      if (inRound) {
         console.log("correct switch");
         return (
           <div className="header">
