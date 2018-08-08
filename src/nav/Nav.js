@@ -7,7 +7,7 @@ export default class Nav extends React.Component {
     startRound: PropTypes.func,
     endRound: PropTypes.func,
     logUserOut: PropTypes.func,
-    viewingStats: PropTypes
+    viewingStats: PropTypes.bool
   };
 
   render() {

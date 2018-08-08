@@ -1,16 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ResponsivePiano from "./responsivePiano/ResponsivePiano";
-import TestController from "./tester/TestController";
-import Nav from "./nav/Nav";
-import Header from "./header/Header";
-import Info from "./info/Info";
-import getInterval from "./tester/getInterval";
-import hinter from "./tester/hinter";
-import Api from "./api/apiManager";
-import getNavInfo from "./nav/navInfo";
+import getNav from "./nav/getNav";
+import getHeader from "./header/getHeader";
 
-export default class Home extends React.Component {
+export default class Stats extends React.Component {
   static propTypes = {
     logUserOut: PropTypes.func.isRequired,
     setViewingStats: PropTypes.func.isRequired

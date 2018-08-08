@@ -38,7 +38,7 @@ export default class CompletedQuestions extends React.Component {
             }
             return (
               <div
-                className={correctness}
+                className={className}
                 style={{
                   width: this.props.width * 0.29,
                   height: this.props.width * 0.29 * 0.27

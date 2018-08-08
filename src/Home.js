@@ -272,17 +272,22 @@ export default class Home extends React.Component {
   };
 
   getScore = results => {
-    let questions = 0;
-    let correctAnswers = 0;
-    results.forEach(question => {
-      questions += 1;
+    if (results && results.length > 0) {
+      let questions = 0;
+      let correctAnswers = 0;
 
-      if (this.isCorrect(question.questionNotes, question.answerNotes)) {
-        correctAnswers += 1;
-      }
-    });
+      results.forEach(question => {
+        questions += 1;
 
-    return { possible: questions, correct: correctAnswers };
+        if (this.isCorrect(question.questionNotes, question.answerNotes)) {
+          correctAnswers += 1;
+        }
+      });
+
+      return { possible: questions, correct: correctAnswers };
+    } else {
+      return { possible: 0, correct: 0 };
+    }
   };
 
   endRound = isRoundComplete => {
@@ -427,7 +432,9 @@ export default class Home extends React.Component {
       this.props.containerWidth,
       this.state.completedQuestions,
       this.scrollInfoToBottom,
-      this.isCorrect
+      this.isCorrect,
+      this.props.containerHeight,
+      responsivePianoHeight
     );
 
     return (

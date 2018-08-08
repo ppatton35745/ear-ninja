@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import TestController from "./TestController";
 
 export default class RoundControl extends React.Component {
   static propTypes = {
     inRound: PropTypes.bool,
     clearCurrentAnswerNotes: PropTypes.func,
     play: PropTypes.func,
-    submitAnswer: PropTYypes.func
+    submitAnswer: PropTypes.func
   };
 
   render() {

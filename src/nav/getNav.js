@@ -14,7 +14,7 @@ const getNav = (
       if (inRound) {
         return (
           <div className="nav">
-            <Nav> {[{ key: 1, label: "End Round", func: endRound }]} </Nav>
+            <Nav>{[{ key: 1, label: "End Round", func: endRound }]}</Nav>
           </div>
         );
       } else {

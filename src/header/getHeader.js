@@ -9,9 +9,11 @@ const getHeader = (
   currentKey,
   getScore
 ) => {
+  const currentScore = getScore(completedQuestions);
   switch (page) {
     case "home": {
       if (inRound || completedQuestions.length > 0) {
+        console.log("correct switch");
         return (
           <div className="header">
             <Header className="roundHeader">
@@ -26,10 +28,7 @@ const getHeader = (
                 },
                 {
                   className: "score",
-                  value: () => {
-                    const currentScore = getScore(completedQuestions);
-                    `${currentScore.correct}/${currentScore.possible}`;
-                  }
+                  value: `${currentScore.correct}/${currentScore.possible}`
                 }
               ]}
             </Header>

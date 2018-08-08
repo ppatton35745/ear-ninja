@@ -3,6 +3,7 @@ import SoundfontProvider from "./misc/SoundfontProvider/SoundfontProvider";
 import Home from "./Home";
 import DimensionsProvider from "./misc/DimensionsProvider";
 import Login from "./Login";
+import Stats from "./Stats";
 
 // webkitAudioContext fallback needed to support Safari
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();

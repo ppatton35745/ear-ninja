@@ -15,7 +15,8 @@
 }
 
 .info img {
-  height: 60px;
+  max-height: 60px;
+  max-width: 76%;
   display: block;
   margin: 15px;
 }

@@ -8,11 +8,18 @@ const getInfo = (
   width,
   completedQuestions,
   scrollInfoToBottom,
-  isCorrect
+  isCorrect,
+  containerHeight,
+  PianoHeight
 ) => {
   if (inRound || completedQuestionLength > 0) {
     return (
-      <div className="info">
+      <div
+        className="info"
+        style={{
+          height: containerHeight - 120 - PianoHeight + "px"
+        }}
+      >
         <CompletedQuestions
           width={width}
           completedQuestions={completedQuestions}
@@ -29,8 +36,19 @@ const getInfo = (
     );
   } else {
     return (
-      <div className="info">
+      <div
+        className="info"
+        style={{
+          height: containerHeight - 120 - PianoHeight + "px"
+        }}
+      >
         <Instructions />
+        <div
+          ref="infoScrollBottom"
+          style={{
+            width: 100 + "%"
+          }}
+        />
       </div>
     );
   }
