@@ -69,46 +69,53 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <div id="login-stuff">
+      <div id="login">
         <form>
+          <h2 className="headline">Welcome to ear-ninja</h2>
           <h3 className="secondary-headline">
             Please log in or register a new account
           </h3>
-          <label className="marginLeft">Email</label>
-          <input
-            onChange={this.handleFieldChange}
-            type="text"
-            ref="emailInput"
-            id="email"
-            placeholder="Email"
-            required=""
-            autoFocus=""
-            className="marginLeft login-input"
-          />
-          <label className="marginLeft">Password</label>
-          <input
-            onChange={this.handleFieldChange}
-            type="password"
-            ref="passwordInput"
-            id="password"
-            placeholder="Password"
-            required=""
-            className="marginLeft login-input"
-          />
-          <button
-            className="marginLeft login-button"
-            type="submit"
-            onClick={this.handleLogin}
-          >
-            Sign in
-          </button>
-          <button
-            id="register"
-            className="marginLeft login-button"
-            onClick={e => this.registerUser(e)}
-          >
-            Register
-          </button>
+          <div className="email">
+            <label className="emailLabel">Email</label>
+            <input
+              onChange={this.handleFieldChange}
+              type="text"
+              ref="emailInput"
+              id="email"
+              placeholder="Email"
+              required=""
+              autoFocus=""
+              className="emailInput"
+            />
+          </div>
+          <div className="password">
+            <label className="passwordLabel">Password</label>
+            <input
+              onChange={this.handleFieldChange}
+              type="password"
+              ref="passwordInput"
+              id="password"
+              placeholder="Password"
+              required=""
+              className="passwordInput"
+            />
+          </div>
+          <div className="buttons">
+            <button
+              className="btn btn-outline-light"
+              type="submit"
+              onClick={this.handleLogin}
+            >
+              Sign in
+            </button>
+            <button
+              id="register"
+              className="btn btn-outline-light"
+              onClick={e => this.registerUser(e)}
+            >
+              Register
+            </button>
+          </div>
         </form>
       </div>
     );

@@ -338,7 +338,7 @@ export default class Home extends React.Component {
         });
 
         const questionData = this.state.completedQuestions.map(question => {
-          question.questionNotes.map((note, index) => {
+          return question.questionNotes.map((note, index) => {
             return Api.postQuestion({
               id: roundId + question.questionNumber + (index + 1),
               roundId: roundId,
@@ -350,7 +350,7 @@ export default class Home extends React.Component {
         });
 
         const answerData = this.state.completedQuestions.map(question => {
-          question.answerNotes.map((note, index) => {
+          return question.answerNotes.map((note, index) => {
             return Api.postAnswer({
               id: roundId + question.questionNumber + (index + 1),
               roundId: roundId,
