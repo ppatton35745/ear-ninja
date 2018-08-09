@@ -11,27 +11,35 @@ percentage.
 
 ## Start-up Instructions
 
-### `git clone git@github.com:ppatton35745/ear-ninja.git`
+```
+git clone git@github.com:ppatton35745/ear-ninja.git
+```
 
 Clones the application to your machine
 
-### `cd ear-ninja/`
+```
+cd ear-ninja/
+```
 
-Change to new directory
+Change to new project directory
 
-### `npm install`
+```
+npm install
+```
 
 Install needed dependencies to run the application
 
-### `cd PATH-TO-PROJECT/ear-ninja/src/db/`
-
-### `json-server -p 5002 -w database.json`
+```
+cd PATH-TO-PROJECT/ear-ninja/src/db/
+json-server -p 5002 -w database.json
+```
 
 Run json-server on 5002 watching the project database file
 
-### `cd PATH-TO-PROJECT/ear-ninja/`
-
-### `npm start`
+```
+cd PATH-TO-PROJECT/ear-ninja/
+npm start
+```
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
