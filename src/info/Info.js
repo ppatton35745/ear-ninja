@@ -31,26 +31,27 @@ export default class Info extends React.Component {
                 completedQuestion.answerNotes
               )
             ) {
-              correctness = correctness + " " + "correct";
+              correctness = correctness + " correct";
             } else {
-              correctness = correctness + " " + "incorrect";
+              correctness = correctness + " incorrect";
             }
             return (
               <div
                 className={correctness}
+                key={completedQuestion.questionNumber}
                 style={{
-                  width: this.props.width * 0.29,
-                  height: this.props.width * 0.29 * 0.27
+                  width: this.props.width * 0.24,
+                  height: this.props.width * 0.24 * 0.27
                 }}
               >
                 <div
                   className="deadPiano"
                   style={{
-                    width: this.props.width * 0.29 * 0.94
+                    width: this.props.width * 0.24 * 0.94
                   }}
                 >
                   <DeadPiano
-                    width={this.props.width * 0.29 * 0.94}
+                    width={this.props.width * 0.24 * 0.94}
                     completedQuestion={completedQuestion}
                     inRound={this.props.inRound}
                   />
@@ -123,6 +124,8 @@ export default class Info extends React.Component {
             end a round early by pressing the "End Round" button on the navbar,
             however scores for early exits will not be recorded.
           </p>
+          <h5>Note:</h5>
+          <p>Using a touchscreen will disable mouse clicks on the keyboard</p>
         </div>
       );
     }
