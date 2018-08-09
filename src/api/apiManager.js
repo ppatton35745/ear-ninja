@@ -45,6 +45,18 @@ class apiManager {
       body: JSON.stringify(answer)
     });
   }
+
+  getRounds = () => {
+    return fetch("http://localhost:5002/rounds").then(e => e.json());
+  };
+
+  getQuestions = () => {
+    return fetch(`http://localhost:5002/questions`).then(e => e.json());
+  };
+
+  getAnswers = () => {
+    return fetch(`http://localhost:5002/answers`).then(e => e.json());
+  };
 }
 
 const API = new apiManager();
