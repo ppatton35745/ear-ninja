@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import getNav from "./nav/getNav";
 import getHeader from "./header/getHeader";
 import Api from "./api/apiManager";
+import LineChart from "./LineChart.js";
 
 export default class Stats extends React.Component {
   static propTypes = {
@@ -13,13 +14,11 @@ export default class Stats extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rounds: [],
-      results: []
+      rounds: []
     };
   }
 
   getScoreData = () => {
-    console.log("running get score data");
     Api.getRounds().then(rounds => {
       Api.getQuestions().then(questions => {
         Api.getAnswers().then(answers => {
@@ -28,6 +27,12 @@ export default class Stats extends React.Component {
             const sortedAnswers = [];
             let numPossible = 0;
             let numCorrect = 0;
+
+            round.date = new Date(round.timeStamp);
+            round.year = round.date.getYear();
+            round.month = round.date.getMonth();
+            round.dayOfWeek = round.date.getDay();
+            round.dayOfMonth = round.date.getDate();
 
             const matchQuestions = questions.filter(question => {
               return String(question.roundId) === String(round.id);
@@ -104,6 +109,7 @@ export default class Stats extends React.Component {
         {Nav}
         {Header}
         <div className="charts">These charts are ass</div>
+        <LineChart rounds={this.state.rounds} />
       </div>
     );
   }
