@@ -9,6 +9,8 @@ many intervals as possible in one minute. Your score will be a
 combination of of total correct answers and your overall accuracy
 percentage.
 
+![](public/img/RoundScreen.jpg)
+
 ## Start-up Instructions
 
 ```
