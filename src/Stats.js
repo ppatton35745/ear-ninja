@@ -11,33 +11,55 @@ export default class Stats extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {};
+    this.state = {
+      rounds: [],
+      results: []
+    };
   }
 
-  getScore = results => {
-    let questions = 0;
-    let correctAnswers = 0;
-    results.forEach(question => {
-      let correct = true;
+  getScoreData = () => {
+    Api.getRounds().then(rounds => {
+      Api.getQuestions().then(questions => {
+        Api.getAnswers().then(answers => {
+          rounds.forEach(round => {
+            const sortedQuestions = [];
+            const sortedAnswers = [];
 
-      if (question.questionNotes.length === question.answerNotes.length) {
-        question.questionNotes.forEach((questionNote, index) => {
-          if (questionNote !== question.answerNotes[index]) {
-            correct = false;
-          }
+            const matchQuestions = questions.filter(question => {
+              return String(question.roundId) === String(round.id);
+            });
+            const matchAnswers = answers.filter(answer => {
+              return String(answer.roundId) === round.id;
+            });
+
+            matchQuestions.forEach((question, index) => {
+              const ind = question.questionNumber - 1;
+
+              if (sortedQuestions[ind] === undefined) {
+                sortedQuestions[ind] = [];
+              }
+              sortedQuestions[ind].push(question.noteValue);
+              sortedQuestions[ind].sort();
+            });
+
+            matchAnswers.forEach(answer => {
+              const ind = answer.questionNumber - 1;
+              if (sortedAnswers[ind] === undefined) {
+                sortedAnswers[ind] = [];
+              }
+              sortedAnswers[ind].push(answer.noteValue);
+              sortedAnswers[ind].sort();
+            });
+
+            round.questions = sortedQuestions;
+            round.answers = sortedAnswers;
+          });
+          this.setState({
+            rounds: rounds
+          });
         });
-      } else {
-        correct = false;
-      }
-
-      questions += 1;
-      if (correct) {
-        correctAnswers += 1;
-      }
+      });
     });
-
-    return { possible: questions, correct: correctAnswers };
   };
 
   componentDidMount() {}
