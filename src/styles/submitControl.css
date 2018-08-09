@@ -7,50 +7,14 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 
 .submitControlButton {
+  width: min-content;
   height: 50%;
   margin-top: 2%;
+  padding: 0 3%;
+  text-align: center;
 }
-
-/* .nav {
-  background-color: black;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-}
-
-.nav .navTitleDiv {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.navTitle {
-  font-size: 3rem;
-  color: white;
-}
-
-.nav .navButtonsDiv {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.navButtons {
-  height: 50%;
-  margin-left: 2%;
-} */
