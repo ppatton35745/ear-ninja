@@ -46,25 +46,19 @@ export default class Login extends Component {
     e.preventDefault();
     //Get users email and password
     Api.getField(`users?email=${this.state.email}`).then(emailResponse => {
-      Api.getField(`users?password=${this.state.password}`).then(
-        passwordResponse => {
-          //Check to see if email or password are already registered
-          if (emailResponse.length === 0 && passwordResponse.length === 0) {
-            //if not, then register the user
-            Api.postUser(this.state.email, this.state.password).then(
-              response => {
-                sessionStorage.setItem("activeUser", response.id);
-                //Call login function to set state in parent component
-                this.props.logUserIn();
-              }
-            );
-          } else {
-            //if email or password are already registered, throw an error
-            alert("Sorry, that email or password is already registered");
-            return;
-          }
-        }
-      );
+      //Check to see if email or password are already registered
+      if (emailResponse.length === 0) {
+        //if not, then register the user
+        Api.postUser(this.state.email, this.state.password).then(response => {
+          sessionStorage.setItem("activeUser", response.id);
+          //Call login function to set state in parent component
+          this.props.logUserIn();
+        });
+      } else {
+        //if email or password are already registered, throw an error
+        alert("Sorry, there is already an account registered to that email.");
+        return;
+      }
     });
   }
   render() {
