@@ -20,8 +20,8 @@
 }
 
 /*
-   * Styles of accidental notes (flat or sharp)
-   */
+     * Styles of accidental notes (flat or sharp)
+     */
 .ReactPiano__Key--accidental {
   background: #555;
   border: 1px solid #fff;
@@ -37,8 +37,8 @@
 }
 
 /*
-   * Styles of natural notes (white keys)
-   */
+     * Styles of natural notes (white keys)
+     */
 .ReactPiano__Key--natural {
   background: #f6f5f3;
   border: 1px solid #888;
@@ -46,9 +46,9 @@
   cursor: pointer;
   z-index: 0;
   /*
-     * Uses flexbox with margin instead of absolute positioning to have more consistent margin rendering.
-     * This causes inline styles to be ignored.
-     */
+       * Uses flexbox with margin instead of absolute positioning to have more consistent margin rendering.
+       * This causes inline styles to be ignored.
+       */
   flex: 1;
   margin-right: 1px;
 }
@@ -59,8 +59,8 @@
 }
 
 /*
-   * Styles of "answered" or selected keys
-   */
+     * Styles of "answered" or selected keys
+     */
 .ReactPiano__Key--answer {
   background: orange;
 }
@@ -79,8 +79,8 @@
 }
 
 /*
-   * Styles of "hint"  keys
-   */
+     * Styles of "hint"  keys
+     */
 .ReactPiano__Key--hint {
   background: purple;
 }
@@ -99,8 +99,8 @@
 }
 
 /*
-   * Styles of "shownAnswer"  keys
-   */
+     * Styles of "shownAnswer"  keys
+     */
 .ReactPiano__Key--shownAnswer {
   background: green;
 }
@@ -119,8 +119,8 @@
 }
 
 /*
-   * Styles of "active" or pressed-down keys
-   */
+     * Styles of "active" or pressed-down keys
+     */
 .ReactPiano__Key--active {
   background: #3ac8da;
 }
@@ -139,8 +139,8 @@
 }
 
 /*
-   * Styles for disabled state
-   */
+     * Styles for disabled state
+     */
 .ReactPiano__Key--disabled.ReactPiano__Key {
   cursor: progress;
 }
@@ -156,8 +156,8 @@
 }
 
 /*
-   * Styles for the note label inside a piano key
-   */
+     * Styles for the note label inside a piano key
+     */
 .ReactPiano__NoteLabelContainer {
   flex: 1;
   /* Align children .ReactPiano__NoteLabel to the bottom of the key */
