@@ -26,6 +26,25 @@ export default class LineChart extends React.Component {
       datesToChart.push(mToday);
       labels.push(this.daysOfWeek[mToday.getDay()]);
 
+      this.props.rounds.forEach(round => {
+        console.log("round Year", round.date.getYear());
+        console.log("filter year", mToday.getYear());
+        console.log("round Month", round.date.getMonth());
+        console.log("filter month", mToday.getMonth());
+        console.log("round Date", round.date.getDate());
+        console.log("filter date", mToday.getDate());
+
+        if (
+          mToday.getYear() === round.date.getYear() &&
+          mToday.getMonth() === round.date.getMonth() &&
+          mToday.getDate() === round.date.getDate()
+        ) {
+          console.log("I should pass");
+        } else {
+          console.log("I should fail");
+        }
+      });
+
       const scores = this.props.rounds
         .filter(round => {
           mToday.getYear() === round.date.getYear() &&
