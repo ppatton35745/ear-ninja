@@ -1,10 +1,12 @@
 class apiManager {
   getField(resource) {
-    return fetch(`http://localhost:5002/${resource}`).then(e => e.json());
+    return fetch(`https://ear-ninja-db.herokuapp.com/${resource}`).then(e =>
+      e.json()
+    );
   }
 
   postUser(email, password) {
-    return fetch("http://localhost:5002/users", {
+    return fetch("https://ear-ninja-db.herokuapp.com/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -17,7 +19,7 @@ class apiManager {
   }
 
   postRound(round) {
-    return fetch("http://localhost:5002/rounds", {
+    return fetch("https://ear-ninja-db.herokuapp.com/rounds", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -27,7 +29,7 @@ class apiManager {
   }
 
   postQuestion(question) {
-    return fetch("http://localhost:5002/questions", {
+    return fetch("https://ear-ninja-db.herokuapp.com/questions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -37,7 +39,7 @@ class apiManager {
   }
 
   postAnswer(answer) {
-    return fetch("http://localhost:5002/answers", {
+    return fetch("https://ear-ninja-db.herokuapp.com/answers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
