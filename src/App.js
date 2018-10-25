@@ -35,30 +35,30 @@ export default class App extends React.Component {
   componentDidUpdate() {}
 
   render() {
-    if (this.state.loggedIn || this.isAuthenticated()) {
-      return (
-        <SoundfontProvider
-          instrumentName="acoustic_grand_piano"
-          audioContext={audioContext}
-          hostname={soundfontHostname}
-          render={({ isLoading, playNote, stopNote }) => (
-            <DimensionsProvider className="dimensionProvider">
-              {({ containerWidth, containerHeight }) => (
-                <Home
-                  onPlayNote={playNote}
-                  onStopNote={stopNote}
-                  disabled={isLoading}
-                  containerWidth={containerWidth}
-                  containerHeight={containerHeight}
-                  logUserOut={this.logUserOut}
-                />
-              )}
-            </DimensionsProvider>
-          )}
-        />
-      );
-    } else {
-      return <Login key={Date.now()} logUserIn={this.logUserIn} />;
-    }
+    // if (this.state.loggedIn || this.isAuthenticated()) {
+    return (
+      <SoundfontProvider
+        instrumentName="acoustic_grand_piano"
+        audioContext={audioContext}
+        hostname={soundfontHostname}
+        render={({ isLoading, playNote, stopNote }) => (
+          <DimensionsProvider className="dimensionProvider">
+            {({ containerWidth, containerHeight }) => (
+              <Home
+                onPlayNote={playNote}
+                onStopNote={stopNote}
+                disabled={isLoading}
+                containerWidth={containerWidth}
+                containerHeight={containerHeight}
+                logUserOut={this.logUserOut}
+              />
+            )}
+          </DimensionsProvider>
+        )}
+      />
+    );
+    // } else {
+    //   return <Login key={Date.now()} logUserIn={this.logUserIn} />;
+    // }
   }
 }
