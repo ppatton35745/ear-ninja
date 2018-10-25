@@ -14,8 +14,8 @@ export default class Nav extends React.Component {
 
     if (!this.props.inRound) {
       buttons = [
-        { key: 1, name: "Play Round", func: this.props.startRound },
-        { key: 2, name: "Logout", func: this.props.logUserOut }
+        { key: 1, name: "Play Round", func: this.props.startRound }
+        // { key: 2, name: "Logout", func: this.props.logUserOut }
       ];
     } else {
       buttons = [

@@ -338,51 +338,52 @@ export default class Home extends React.Component {
       });
 
     if (isRoundComplete) {
-      if (
-        !sessionStorage.getItem("activeUser") ||
-        this.state.completedQuestions.length === 0
-      ) {
-        complete();
-      } else {
-        const roundTimeStamp = new Date();
-        const roundId =
-          sessionStorage.getItem("activeUser") +
-          this.state.currentKey +
-          roundTimeStamp;
+      // if (
+      //   !sessionStorage.getItem("activeUser") ||
+      //   this.state.completedQuestions.length === 0
+      // ) {
+      //   complete();
+      // } else {
+      // const roundTimeStamp = new Date();
+      // const roundId =
+      //   sessionStorage.getItem("activeUser") +
+      //   this.state.currentKey +
+      //   roundTimeStamp;
 
-        const roundData = Api.postRound({
-          id: roundId,
-          userId: sessionStorage.getItem("activeUser"),
-          timeStamp: roundTimeStamp,
-          musicKey: this.state.currentKey
-        });
+      // const roundData = Api.postRound({
+      //   id: roundId,
+      //   userId: sessionStorage.getItem("activeUser"),
+      //   timeStamp: roundTimeStamp,
+      //   musicKey: this.state.currentKey
+      // });
 
-        const questionData = this.state.completedQuestions.map(question => {
-          return question.questionNotes.map((note, index) => {
-            return Api.postQuestion({
-              id: roundId + question.questionNumber + (index + 1),
-              roundId: roundId,
-              questionNumber: question.questionNumber,
-              questionPartNumber: index + 1,
-              noteValue: note
-            });
-          });
-        });
+      // const questionData = this.state.completedQuestions.map(question => {
+      //   return question.questionNotes.map((note, index) => {
+      //     return Api.postQuestion({
+      //       id: roundId + question.questionNumber + (index + 1),
+      //       roundId: roundId,
+      //       questionNumber: question.questionNumber,
+      //       questionPartNumber: index + 1,
+      //       noteValue: note
+      //     });
+      //   });
+      // });
 
-        const answerData = this.state.completedQuestions.map(question => {
-          return question.answerNotes.map((note, index) => {
-            return Api.postAnswer({
-              id: roundId + question.questionNumber + (index + 1),
-              roundId: roundId,
-              questionNumber: question.questionNumber,
-              answerPartNumber: index + 1,
-              noteValue: note
-            });
-          });
-        });
+      // const answerData = this.state.completedQuestions.map(question => {
+      //   return question.answerNotes.map((note, index) => {
+      //     return Api.postAnswer({
+      //       id: roundId + question.questionNumber + (index + 1),
+      //       roundId: roundId,
+      //       questionNumber: question.questionNumber,
+      //       answerPartNumber: index + 1,
+      //       noteValue: note
+      //     });
+      //   });
+      // });
 
-        Promise.all([roundData, questionData, answerData]).then(complete());
-      }
+      // Promise.all([roundData, questionData, answerData]).then(complete());
+      complete();
+      // }
     } else {
       early();
     }

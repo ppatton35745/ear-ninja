@@ -13,7 +13,8 @@ export default class Info extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.completedQuestions.length !==
-      prevProps.completedQuestions.length
+        prevProps.completedQuestions.length &&
+      this.props.inRound === true
     ) {
       this.props.scrollInfoToBottom();
     }
